@@ -2668,7 +2668,7 @@ InputSlotMorph.prototype.toXML = function (serializer) {
         	'<l><wish s="@" type="@" category="@">@</wish></l>',
             this.selectedBlock.semanticSpec,
          	this.selectedBlock instanceof CommandBlockMorph ? 'command'
-          		: (this.selectedBlock.isPredicate ? 'predicate' : 'reporter'),
+          		: (this.selectedBlock.shape === 'predicate' ? 'predicate' : 'reporter'),
             this.selectedBlock.category,
             this.selectedBlock.storedTranslations
         );

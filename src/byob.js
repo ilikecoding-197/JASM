@@ -1501,8 +1501,8 @@ CustomCommandBlockMorph.prototype.refreshPrototype = function () {
                 true
             );
             hat.replaceInput(this, myself);
-        } else if (this.isPredicate !== (hat.type === 'predicate')) {
-            this.isPredicate = (hat.type === 'predicate');
+        } else if ((this.shape === 'predicate') !== (hat.type === 'predicate')) {
+            this.shape = (hat.type === 'predicate') ? 'predicate' : 'reporter';
             this.fixLayout();
             this.rerender();
         }
@@ -2286,7 +2286,7 @@ CustomCommandBlockMorph.prototype.alternatives = function () {
         stage = rcvr.parentThatIsA(StageMorph),
         allDefs = rcvr.customBlocks.concat(stage.globalBlocks),
         type = this instanceof CommandBlockMorph ? 'command'
-            : (this.isPredicate ? 'predicate' : 'reporter');
+            : (this.shape === 'predicate' ? 'predicate' : 'reporter');
 
     if (this.isGlobal && this.definition.primitive) {
         return (SpriteMorph.prototype.blockAlternatives[
@@ -2355,20 +2355,20 @@ CustomReporterBlockMorph.prototype.isCustomBlock = true;
 
 // CustomReporterBlockMorph instance creation:
 
-function CustomReporterBlockMorph(definition, isPredicate, isProto) {
-    this.init(definition, isPredicate, isProto);
+function CustomReporterBlockMorph(definition, shape, isProto) {
+    this.init(definition, shape, isProto);
 }
 
 CustomReporterBlockMorph.prototype.init = function (
     definition,
-    isPredicate,
+    shape,
     isProto
 ) {
     this.definition = definition; // mandatory
     this.semanticSpec = ''; // used for translations
     this.isGlobal = definition ? definition.isGlobal : false;
     this.isPrototype = isProto || false; // optional
-    CustomReporterBlockMorph.uber.init.call(this, isPredicate, true); // sil.
+    CustomReporterBlockMorph.uber.init.call(this, shape, true); // sil.
     if (isProto) {
         this.isTemplate = true;
     }
@@ -2392,7 +2392,7 @@ CustomReporterBlockMorph.prototype.refresh = function (aDefinition, offset) {
     var def = aDefinition || this.definition;
     CustomCommandBlockMorph.prototype.refresh.call(this, aDefinition, offset);
     if (!this.isPrototype) {
-        this.isPredicate = (def.type === 'predicate');
+        this.shape = (def.type === 'predicate') ? 'predicate' : 'reporter';
     }
     if (this.parent instanceof SyntaxElementMorph) {
         this.parent.cachedInputs = null;
@@ -3131,7 +3131,7 @@ BlockDialogMorph.prototype.createTypeButtons = function () {
         () => this.blockType === 'reporter'
     );
 
-    block = new ReporterBlockMorph(true);
+    block = new ReporterBlockMorph('predicate');
     block.setColor(clr);
     block.setSpec(localize('Predicate'));
     this.addBlockTypeButton(

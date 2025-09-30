@@ -1963,7 +1963,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 part = new RingReporterSlotMorph();
                 break;
             case 'predicate':
-                part = new RingReporterSlotMorph(true);
+                part = new RingReporterSlotMorph('predicate');
                 break;
             default:
                 throw new Error('unknown ring kind: "' + info.kind + '"');
@@ -2266,7 +2266,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
         x = this.left() + ico + this.edge + this.labelPadding;
         if (this instanceof RingMorph) {
             x = this.left() + space; //this.labelPadding;
-        } else if (this.isPredicate) {
+        } else if (this.shape == "predicate") {
             x = this.left() + ico + this.rounding;
         } else if (this instanceof MultiArgMorph ||
             this instanceof ArgLabelMorph
@@ -2281,7 +2281,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
             }
             if (part instanceof CSlotMorph) {
                 x -= this.labelPadding;
-                if (this.isPredicate) {
+                if (this.shape == "predicate") {
                     x = this.left() + ico + this.rounding;
                 }
                 part.setColor(this.color);
@@ -2290,7 +2290,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
             } else if (part instanceof MultiArgMorph &&
                     (part.slotSpec.includes('%cs'))
             ) {
-                if (this.isPredicate) {
+                if (this.shape == "predicate") {
                     x += this.corner;
                 }
                 part.setPosition(new Point(x, y));
@@ -2351,7 +2351,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
                 }
             }
         }
-        if (this instanceof ReporterBlockMorph && !this.isPredicate) {
+        if (this instanceof ReporterBlockMorph && this.shape != "predicate") {
             bottomCorrection = Math.max(
                 this.bottomPadding,
                 this.rounding - this.bottomPadding
@@ -2369,7 +2369,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
     }
 
     // determine my width:
-    if (this.isPredicate) {
+    if (this.shape == "predicate") {
         blockWidth = Math.max(
             blockWidth,
             maxX - this.left() + this.rounding
@@ -2412,7 +2412,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
         if (part instanceof CSlotMorph ||
             (part.slotSpec && part.slotSpec.includes('%cs'))
         ) {
-            if (this.isPredicate) {
+            if (this.shape == "predicate") {
                 part.bounds.setWidth(
                     blockWidth -
                         ico -
@@ -4011,7 +4011,7 @@ BlockMorph.prototype.isChangeableTo = function (type) {
 BlockMorph.prototype.type = function () {
     // private
     return this instanceof CommandBlockMorph ? 'command'
-        : (this.isPredicate ? 'predicate' : 'reporter');
+        : (this.shape == "predicate" ? 'predicate' : 'reporter');
 };
 
 BlockMorph.prototype.isUnattached = function () {
@@ -5444,7 +5444,7 @@ BlockMorph.prototype.drawMethodIcon = function (ctx) {
     if (this instanceof HatBlockMorph) {
         y = (this.height() - this.hatHeight + h) / 2;
     }
-    if (this.isPredicate) {
+    if (this.shape == "predicate") {
         x = this.rounding;
     }
     ctx.fillStyle = isNormal ? this.cachedClrBright : this.cachedClrDark;
@@ -7514,13 +7514,13 @@ ReporterBlockMorph.uber = BlockMorph.prototype;
 
 // ReporterBlockMorph instance creation:
 
-function ReporterBlockMorph(isPredicate) {
-    this.init(isPredicate);
+function ReporterBlockMorph(shape) {
+    this.init(shape);
 }
 
-ReporterBlockMorph.prototype.init = function (isPredicate) {
+ReporterBlockMorph.prototype.init = function (shape) {
     ReporterBlockMorph.uber.init.call(this);
-    this.isPredicate = isPredicate || false;
+    this.shape = shape || 'reporter';
 
     this.bounds.setExtent(new Point(50, 22).multiplyBy(this.scale));
     this.fixLayout();
@@ -7761,7 +7761,7 @@ ReporterBlockMorph.prototype.userDestroy = function () {
 // ReporterBlockMorph drawing:
 
 ReporterBlockMorph.prototype.outlinePath = function (ctx, inset) {
-    if (this.isPredicate) {
+    if (this.shape == "predicate") {
         this.outlinePathDiamond(ctx, inset);
     } else {
         this.outlinePathOval(ctx, inset);
@@ -7851,7 +7851,7 @@ ReporterBlockMorph.prototype.outlinePathDiamond = function (ctx, inset) {
 };
 
 ReporterBlockMorph.prototype.drawEdges = function (ctx) {
-    if (this.isPredicate) {
+    if (this.shape == "predicate") {
         this.drawEdgesDiamond(ctx);
     } else {
         this.drawEdgesOval(ctx);
@@ -8304,7 +8304,7 @@ RingMorph.prototype.embed = function (aBlock, inputNames, noVanish) {
         this.selector = 'reifyScript';
         slot = this.parts()[0];
         slot.nestedBlock(aBlock);
-    } else if (aBlock.isPredicate) {
+    } else if (aBlock.shape == "predicate") {
         this.isStatic = true;
         this.setSpec('%rp %ringparms');
         this.selector = 'reifyPredicate';
@@ -13030,7 +13030,7 @@ BooleanSlotMorph.prototype.getSpec = function () {
 
 BooleanSlotMorph.prototype.isWide = function () {
     return this.isStatic && (
-        !(this.parent instanceof BlockMorph) || this.parent?.isPredicate);
+        !(this.parent instanceof BlockMorph) || this.parent?.shape == "predicate");
 };
 
 // BooleanSlotMorph accessing:
@@ -15150,13 +15150,13 @@ FunctionSlotMorph.uber = ArgMorph.prototype;
 
 // FunctionSlotMorph instance creation:
 
-function FunctionSlotMorph(isPredicate) {
-    this.init(isPredicate);
+function FunctionSlotMorph(shape) {
+    this.init(shape);
 }
 
-FunctionSlotMorph.prototype.init = function (isPredicate) {
+FunctionSlotMorph.prototype.init = function (shape) {
     FunctionSlotMorph.uber.init.call(this);
-    this.isPredicate = isPredicate || false;
+    this.shape = shape || 'reporter';
     this.color = this.rfColor;
 };
 
@@ -15181,7 +15181,7 @@ FunctionSlotMorph.prototype.render = function (ctx) {
         .toString();
     this.cachedClrDark = borderColor.darker(this.contrast).toString();
 
-    if (this.isPredicate) {
+    if (this.shape === 'predicate') {
         this.drawDiamond(ctx);
     } else {
         this.drawRounded(ctx);
@@ -15528,12 +15528,12 @@ ReporterSlotMorph.uber = FunctionSlotMorph.prototype;
 
 // ReporterSlotMorph instance creation:
 
-function ReporterSlotMorph(isPredicate) {
-    this.init(isPredicate);
+function ReporterSlotMorph(shape) {
+    this.init(shape);
 }
 
-ReporterSlotMorph.prototype.init = function (isPredicate) {
-    ReporterSlotMorph.uber.init.call(this, isPredicate, true);
+ReporterSlotMorph.prototype.init = function (shape) {
+    ReporterSlotMorph.uber.init.call(this, shape, true);
     this.add(this.emptySlot());
     this.fixLayout();
 };
@@ -15626,12 +15626,12 @@ RingReporterSlotMorph.prototype.enableCommandDrops = true;
 
 // RingReporterSlotMorph instance creation:
 
-function RingReporterSlotMorph(isPredicate) {
-    this.init(isPredicate);
+function RingReporterSlotMorph(shape) {
+    this.init(shape);
 }
 
-RingReporterSlotMorph.prototype.init = function (isPredicate) {
-    RingReporterSlotMorph.uber.init.call(this, isPredicate, true);
+RingReporterSlotMorph.prototype.init = function (shape) {
+    RingReporterSlotMorph.uber.init.call(this, shape, true);
     this.contrast = RingMorph.prototype.contrast;
 };
 
@@ -15714,7 +15714,7 @@ RingReporterSlotMorph.prototype.render = function (ctx) {
 
     // only add 3D-Effect here, rendering of the flat shape happens at the
     // encompassing block level
-    if (this.isPredicate) {
+    if (this.shape === 'predicate') {
         this.drawEdgesDiamond(ctx);
     } else {
         this.drawEdgesOval(ctx);
@@ -15722,7 +15722,7 @@ RingReporterSlotMorph.prototype.render = function (ctx) {
 };
 
 RingReporterSlotMorph.prototype.outlinePath = function (ctx, offset) {
-    if (this.isPredicate) {
+    if (this.shape === 'predicate') {
         this.outlinePathDiamond(ctx, offset);
     } else {
         this.outlinePathOval(ctx, offset);
@@ -17312,7 +17312,7 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
     h = new HatBlockMorph();
     h.setSpec('When $greenflag pressed');
 
-    b = new ReporterBlockMorph(true);
+    b = new ReporterBlockMorph('predicate');
     b.setSpec('%bool');
 
     c = new CommandBlockMorph();
