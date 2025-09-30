@@ -1780,6 +1780,13 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             defaults: [1, 10],
             code: 'rand'
         },
+        reportRandomBoolean: {
+            type: 'predicate',
+            category: 'operators',
+            spec: 'random boolean with %n chance to be true',
+            defaults: [50],
+            code: 'randBool'
+        },
         reportVariadicEquals: {
             type: 'predicate',
             category: 'operators',
@@ -4036,7 +4043,9 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('reportRound'));
         blocks.push(block('reportMonadic'));
         blocks.push(block('reportAtan2'));
+        blocks.push('-');
         blocks.push(block('reportRandom'));
+        blocks.push(block('reportRandomBoolean'));
         blocks.push('-');
         blocks.push(block('reportVariadicLessThan'));
         blocks.push(block('reportVariadicEquals'));
@@ -11621,7 +11630,9 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('reportRound'));
         blocks.push(block('reportMonadic'));
         blocks.push(block('reportAtan2'));
+        blocks.push('-');
         blocks.push(block('reportRandom'));
+        blocks.push(block('reportRandomBoolean'));
         blocks.push('-');
         blocks.push(block('reportVariadicLessThan'));
         blocks.push(block('reportVariadicEquals'));

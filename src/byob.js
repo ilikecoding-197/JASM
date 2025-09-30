@@ -197,7 +197,7 @@ CustomBlockDefinition.prototype.blockInstance = function (storeTranslations) {
     } else {
         block = new CustomReporterBlockMorph(
             this,
-            this.type === 'predicate'
+            this.type === 'predicate' ? 'predicate' : 'reporter'
         );
     }
     block.isDraggable = true;
@@ -227,7 +227,7 @@ CustomBlockDefinition.prototype.prototypeInstance = function () {
     } else {
         block = new CustomReporterBlockMorph(
             this,
-            this.type === 'predicate',
+            this.type === 'predicate' ? 'predicate' : 'reporter',
             true
         );
     }
@@ -1478,7 +1478,7 @@ CustomCommandBlockMorph.prototype.refreshPrototype = function () {
         if (['reporter', 'predicate'].includes(hat.type)) {
             myself = new CustomReporterBlockMorph(
                 this.definition,
-                hat.type === 'predicate',
+                hat.type === 'predicate' ? 'predicate' : 'reporter',
                 true
             );
         } else if (hat.type === 'hat') {
@@ -1515,7 +1515,7 @@ CustomCommandBlockMorph.prototype.refreshPrototype = function () {
         } else if (['reporter', 'predicate'].includes(hat.type)) {
             myself = new CustomReporterBlockMorph(
                 this.definition,
-                hat.type === 'predicate',
+                hat.type === 'predicate' ? 'predicate' : 'reporter',
                 true
             );
         }

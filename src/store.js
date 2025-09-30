@@ -1576,7 +1576,7 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
         } else {
             block = new CustomReporterBlockMorph(
                 info,
-                info.type === 'predicate',
+                info.type === 'predicate' ? 'predicate' : 'reporter',
                 false
             );
         }
