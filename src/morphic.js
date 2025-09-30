@@ -4595,6 +4595,11 @@ Morph.prototype.developersMenu = function () {
         },
         'open a new window\nwith a picture of this morph'
     );
+    menu.addItem(
+        "save as variable...",
+        "saveAsVariable",
+        "save a reference to this\nmorph so you can\naccess it in the console"
+    );
     menu.addLine();
     if (this.isDraggable) {
         menu.addItem(
@@ -4621,6 +4626,26 @@ Morph.prototype.developersMenu = function () {
     }
     return menu;
 };
+
+Morph.prototype.saveAsVariable = function() {
+    var world = this.world instanceof Function ? this.world() : this.world;
+
+    if (!window.morph) {
+        window.morph = this;
+        return;
+    }
+
+    var menu = new MenuMorph(null, "there is already a variable\nnamed `morph` in the global scope.\noverride it?");
+    menu.addItem(
+        "yes",
+        () => {
+            window.morph = this;
+            return;
+        }
+    );
+    menu.addItem("no", nop);
+    menu.popUpAtHand(world);
+}
 
 Morph.prototype.userMenu = function () {
     return null;
