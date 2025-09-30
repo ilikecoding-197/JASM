@@ -2,6 +2,10 @@
 
 ## in development:
 
+### 2025-09-30
+* morphic: allow saving a morph as a variable in the global scope for easy debugging
+in web console, shouldn't break anything
+
 ## 11.0.4:
 * **Notable Changes:**
     * neural networks library: added "confusion matrix" option to the "train/validate" reporter
