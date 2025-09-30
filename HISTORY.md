@@ -306,6 +306,10 @@
 * neural networks library: tweaked "partition" reporter to make sure each class in a data set is adequately represented in both partitions
 * German translation update for newly added "classifier" string
 
+### 2025-09-30
+* morphic: allow saving a morph as a variable in the global scope for easy debugging
+in web console, shouldn't break anything
+
 ## 11.0.4:
 * **Notable Changes:**
     * neural networks library: added "confusion matrix" option to the "train/validate" reporter
