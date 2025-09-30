@@ -5,6 +5,8 @@
 ### 2025-09-30
 * morphic: allow saving a morph as a variable in the global scope for easy debugging
 in web console, shouldn't break anything
+* added new "random boolean" block, along with a new "group" of blocks for randomness
+* blocks: changed isPredicate to a shape member, with 'predicate' for predicate
 
 ## 11.0.4:
 * **Notable Changes:**
