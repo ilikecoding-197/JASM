@@ -5151,6 +5151,10 @@ Process.prototype.reportRandom = function (a, b) {
     return this.hyper(this.reportBasicRandom, a, b);
 };
 
+Process.prototype.reportRandomBoolean = function(chance) {
+    return Math.random() < (+chance / 100);
+}
+
 Process.prototype.reportBasicRandom = function (min, max) {
     var floor = Math.min(+min, +max),
         ceil = Math.max(+min, +max);
