@@ -557,6 +557,13 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             spec: 'new costume %l width %dim height %dim',
             code: 'newCostume'
         },
+        reportNewRectangleCostume: {
+            type: 'reporter',
+            category: 'looks',
+            spec: 'new rectangle costume %clr width: %dim height: %dim',
+            defaults: [WHITE, 100, 50]
+        },
+        
         reportNewCostumeStretched: {
             type: 'reporter',
             category: 'looks',
@@ -1664,6 +1671,12 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             spec: 'microphone %audio',
             defaults: [['volume']],
             code: 'audio'
+        },
+        reportSnapVersion: {
+            type: 'reporter',
+            category: 'sensing',
+            spec: 'snap version',
+            code: 'snapVersion'
         },
 
         // Operators
@@ -3601,7 +3614,7 @@ SpriteMorph.prototype.blockForSelector = function (selector, setDefaults) {
         block = info.type === 'command' ? new CommandBlockMorph()
             : info.type === 'hat' ? new HatBlockMorph()
                 : info.type === 'ring' ? new RingMorph()
-                    : new ReporterBlockMorph(info.type === 'predicate');
+                    : new ReporterBlockMorph(info.type === 'predicate' ? 'predicate' : 'reporter');
         block.color = this.blockColorFor(info.category);
         block.category = info.category;
         block.selector = migration ? migration.selector : selector;
@@ -3775,6 +3788,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('reportNewCostumeStretched'));
         blocks.push(block('reportNewCostumeSkewed'));
         blocks.push(block('reportNewCostume'));
+        blocks.push(block('reportNewRectangleCostume'));
         blocks.push('-');
         blocks.push(block('changeEffect'));
         blocks.push(block('setEffect'));
@@ -3988,6 +4002,8 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('reportGlobalFlag'));
         blocks.push(block('doSetGlobalFlag'));
+        blocks.push('-');
+        blocks.push(block('reportSnapVersion'));
 
         // for debugging: ///////////////
         if (devMode) {
@@ -11194,6 +11210,8 @@ StageMorph.prototype.fireUserEditEvent = function (
 };
 
 StageMorph.prototype.fireGreenFlagEvent = function () {
+    alert("Green flag!");
+
     var procs = [],
         ide = this.parentThatIsA(IDE_Morph);
 
@@ -11381,6 +11399,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('reportNewCostumeStretched'));
         blocks.push(block('reportNewCostumeSkewed'));
         blocks.push(block('reportNewCostume'));
+        blocks.push(block('reportNewRectangleCostume'));
         blocks.push('-');
         blocks.push(block('changeEffect'));
         blocks.push(block('setEffect'));
@@ -11567,6 +11586,8 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('reportGlobalFlag'));
         blocks.push(block('doSetGlobalFlag'));
+        blocks.push('-');
+        blocks.push(block('reportSnapVersion'));
 
         // for debugging: ///////////////
         if (this.world().isDevMode) {

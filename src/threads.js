@@ -4508,6 +4508,13 @@ Process.prototype.reportAudio = function (choice) {
     this.pushContext();
 };
 
+// Process snap version
+Process.prototype.reportSnapVersion = function() {
+    // by the time this function is called, gui would have already
+    // set the SnapVersion, so just return it
+    return SnapVersion;
+}
+
 Process.prototype.untype = function (typedArray) {
     var len = typedArray.length,
         arr = new Array(len),
@@ -4933,7 +4940,7 @@ Process.prototype.reportTypeOf = function (thing) {
             return thing.expression.dataType();
         }
         if (thing.expression instanceof ReporterBlockMorph) {
-            if (thing.expression.isPredicate) {
+            if (thing.expression.shape === 'predicate') {
                 return 'predicate';
             }
             return 'reporter';
@@ -4941,7 +4948,7 @@ Process.prototype.reportTypeOf = function (thing) {
 
         if (thing.expression instanceof Array) {
             exp = thing.expression[thing.pc || 0];
-            if (exp.isPredicate) {
+            if (exp.shape === 'predicate') {
                 return 'predicate';
             }
             if (exp instanceof RingMorph) {
@@ -8285,6 +8292,40 @@ Process.prototype.reportNewCostume = function (pixels, width, height, name) {
         )
     );
 };
+
+Process.prototype.reportNewRectangleCostume = function (color, width, height, name) {
+    var rcvr, stage, canvas, ctx;
+
+    if (this.inputOption(width) === 'current') {
+        rcvr = this.blockReceiver();
+        stage = rcvr.parentThatIsA(StageMorph);
+        width = rcvr.costume ? rcvr.costume.width() : stage.dimensions.x;
+    }
+    if (this.inputOption(height) === 'current') {
+        rcvr = rcvr || this.blockReceiver();
+        stage = stage || rcvr.parentThatIsA(StageMorph);
+        height = rcvr.costume ? rcvr.costume.height() : stage.dimensions.y;
+    }
+    width = Math.abs(Math.floor(+width));
+    height = Math.abs(Math.floor(+height));
+    if (!isFinite(width * height) || isNaN(width * height)) {
+       throw new Error(
+           'expecting a finite number\nbut getting Infinity or NaN'
+       );
+    }
+
+    canvas = newCanvas(new Point(width, height), true);
+    ctx = canvas.getContext('2d');
+    ctx.fillStyle = color.toString();
+    ctx.fillRect(0, 0, width, height);
+
+    return new Costume(
+        canvas,
+        name || (rcvr || this.blockReceiver()).newCostumeName(
+            localize('costume')
+        )
+    );
+}
 
 Process.prototype.reportPentrailsAsSVG = function () {
     // interpolated
