@@ -197,7 +197,8 @@ CustomBlockDefinition.prototype.blockInstance = function (storeTranslations) {
     } else {
         block = new CustomReporterBlockMorph(
             this,
-            this.type === 'predicate' ? 'predicate' : 'reporter'
+            this.type === 'predicate' ? 'predicate' :
+                (this.shape ? this.shape : 'reporter')
         );
     }
     block.isDraggable = true;
@@ -227,7 +228,8 @@ CustomBlockDefinition.prototype.prototypeInstance = function () {
     } else {
         block = new CustomReporterBlockMorph(
             this,
-            this.type === 'predicate' ? 'predicate' : 'reporter',
+            this.type === 'predicate' ? 'predicate' :
+                (this.shape ? this.shape : 'reporter'),
             true
         );
     }
@@ -2833,6 +2835,7 @@ function BlockDialogMorph(target, action, environment) {
 BlockDialogMorph.prototype.init = function (target, action, environment) {
     // additional properties:
     this.blockType = 'command';
+    this.blockShape = null;
     this.category = 'other';
     this.isGlobal = true;
     this.types = null;
@@ -3247,6 +3250,7 @@ BlockDialogMorph.prototype.getInput = function () {
     def.type = this.blockType;
     def.category = this.category;
     def.isGlobal = this.isGlobal;
+    def.shape = this.blockShape;
     if (def.type !== 'command') {
         body = Process.prototype.reify.call(
             null,

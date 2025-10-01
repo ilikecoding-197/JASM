@@ -7761,12 +7761,18 @@ ReporterBlockMorph.prototype.userDestroy = function () {
 // ReporterBlockMorph drawing:
 
 ReporterBlockMorph.prototype.outlinePath = function (ctx, inset) {
-    if (this.shape == "predicate") {
+    switch (this.shape) {
+    case "predicate":
         this.outlinePathDiamond(ctx, inset);
-    } else {
+        break;
+    case "color":
+        this.outlinePathRectangle(ctx, inset);
+        break;
+    default:
         this.outlinePathOval(ctx, inset);
+        break;
     }
-};
+}
 
 ReporterBlockMorph.prototype.outlinePathOval = function (ctx, inset) {
     // draw the 'flat' shape
@@ -7824,6 +7830,24 @@ ReporterBlockMorph.prototype.outlinePathOval = function (ctx, inset) {
     ctx.lineTo(r - radius, r); // close the path so we can clip it for rings
 };
 
+ReporterBlockMorph.prototype.outlinePathRectangle = function (ctx, inset) {
+    // draw the 'flat' shape
+    var h = this.height(),
+        w = this.width(),
+        pos = this.position();
+
+    ctx.lineTo(w, 0);
+    ctx.lineTo(w, h);
+
+    // C-Slots
+    this.cSlots().forEach(slot => {
+        slot.outlinePath(ctx, inset, slot.position().subtract(pos));
+    });
+
+    ctx.lineTo(0, h);
+    ctx.lineTo(0, 0);
+};
+
 ReporterBlockMorph.prototype.outlinePathDiamond = function (ctx, inset) {
     // draw the 'flat' shape:
     var w = this.width(),
@@ -7851,10 +7875,16 @@ ReporterBlockMorph.prototype.outlinePathDiamond = function (ctx, inset) {
 };
 
 ReporterBlockMorph.prototype.drawEdges = function (ctx) {
-    if (this.shape == "predicate") {
+    switch (this.shape) {
+    case "predicate":
         this.drawEdgesDiamond(ctx);
-    } else {
+        break;
+    case "color":
+        this.drawEdgesRectangle(ctx);
+        break;
+    default:
         this.drawEdgesOval(ctx);
+        break;
     }
 };
 
@@ -8031,6 +8061,174 @@ ReporterBlockMorph.prototype.drawEdgesOval = function (ctx) {
 
     ctx.lineTo(w - shift, h - r);
     ctx.stroke();
+};
+
+ReporterBlockMorph.prototype.drawEdgesRectangle = function (ctx) {
+    // add 3D-Effect
+    var h = this.height(),
+        w = this.width(),
+        shift = this.edge / 2,
+        y,
+        top = this.top(),
+        cslots = this.cSlots(),
+        gradient;
+
+    ctx.lineWidth = this.edge;
+
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(w, 0);
+    ctx.lineTo(w, h);
+    ctx.lineTo(0, h);
+    ctx.lineTo(0, 0);
+    ctx.stroke();
+
+    // // half-tone edges
+    // // bottem left corner
+    // gradient = ctx.createRadialGradient(
+    //     r,
+    //     h - r,
+    //     r - this.edge,
+    //     r,
+    //     h - r,
+    //     r + this.edge
+    // );
+    // gradient.addColorStop(0, this.cachedClr);
+    // gradient.addColorStop(1, this.cachedClrBright);
+    // ctx.strokeStyle = gradient;
+    // ctx.beginPath();
+    // ctx.moveTo(0, 0);
+    // ctx.lineTo(w, 0);
+    // ctx.stroke();
+
+    // // top right corner
+    // gradient = ctx.createRadialGradient(
+    //     w - r,
+    //     r,
+    //     r - this.edge,
+    //     w - r,
+    //     r,
+    //     r + this.edge
+    // );
+    // gradient.addColorStop(0, this.cachedClr);
+    // gradient.addColorStop(1, this.cachedClrDark);
+    // ctx.strokeStyle = gradient;
+    // ctx.beginPath();
+    // ctx.moveTo(w, 0);
+    // ctx.lineTo(w, h);
+    // ctx.stroke();
+
+    // // normal gradient edges
+
+    // // top edge: straight line
+    // gradient = ctx.createLinearGradient(
+    //     0,
+    //     0,
+    //     0,
+    //     this.edge
+    // );
+    // gradient.addColorStop(0, this.cachedClrBright);
+    // gradient.addColorStop(1, this.cachedClr);
+    // ctx.strokeStyle = gradient;
+    // ctx.beginPath();
+    // ctx.moveTo(r - shift, shift);
+    // ctx.lineTo(w - r + shift, shift);
+    // ctx.stroke();
+
+    // // top edge: left corner
+    // gradient = ctx.createRadialGradient(
+    //     r,
+    //     r,
+    //     r - this.edge,
+    //     r,
+    //     r,
+    //     r
+    // );
+    // gradient.addColorStop(0, this.cachedClr);
+    // gradient.addColorStop(1, this.cachedClrBright);
+    // ctx.strokeStyle = gradient;
+    // ctx.beginPath();
+    // ctx.arc(
+    //     r,
+    //     r,
+    //     r - shift,
+    //     radians(180),
+    //     radians(270),
+    //     false
+    // );
+    // ctx.stroke();
+
+    // // bottom edge: right corner
+    // gradient = ctx.createRadialGradient(
+    //     w - r,
+    //     h - r,
+    //     r - this.edge,
+    //     w - r,
+    //     h - r,
+    //     r
+    // );
+    // gradient.addColorStop(0, this.cachedClr);
+    // gradient.addColorStop(1, this.cachedClrDark);
+    // ctx.strokeStyle = gradient;
+    // ctx.beginPath();
+    // ctx.arc(
+    //     w - r,
+    //     h - r,
+    //     r - shift,
+    //     radians(0),
+    //     radians(90),
+    //     false
+    // );
+    // ctx.stroke();
+
+    // // bottom edge: straight line
+    // gradient = ctx.createLinearGradient(
+    //     0,
+    //     h - this.edge,
+    //     0,
+    //     h
+    // );
+    // gradient.addColorStop(0, this.cachedClr);
+    // gradient.addColorStop(1, this.cachedClrDark);
+    // ctx.strokeStyle = gradient;
+    // ctx.beginPath();
+    // ctx.moveTo(r - shift, h - shift);
+    // ctx.lineTo(w - r + shift, h - shift);
+    // ctx.stroke();
+
+    // // left edge: straight vertical line
+    // gradient = ctx.createLinearGradient(0, 0, this.edge, 0);
+    // gradient.addColorStop(0, this.cachedClrBright);
+    // gradient.addColorStop(1, this.cachedClr);
+    // ctx.strokeStyle = gradient;
+    // ctx.beginPath();
+    // ctx.moveTo(shift, r);
+    // ctx.lineTo(shift, h - r);
+    // ctx.stroke();
+
+    // // right edge: straight vertical line
+    // gradient = ctx.createLinearGradient(w - this.edge, 0, w, 0);
+    // gradient.addColorStop(0, this.cachedClr);
+    // gradient.addColorStop(1, this.cachedClrDark);
+    // ctx.strokeStyle = gradient;
+
+    // if (cslots.length) {
+    //     ctx.beginPath();
+    //     ctx.moveTo(w - shift, r + shift);
+    //     cslots.forEach(slot => {
+    //         y = slot.top() - top;
+    //         ctx.lineTo(w - shift, y);
+    //         ctx.stroke();
+    //         ctx.beginPath();
+    //         ctx.moveTo(w - shift, y + slot.height());
+    //     });
+    // } else {
+    //     ctx.beginPath();
+    //     ctx.moveTo(w - shift, r + shift);
+    // }
+
+    // ctx.lineTo(w - shift, h - r);
+    // ctx.stroke();
 };
 
 ReporterBlockMorph.prototype.drawEdgesDiamond = function (ctx) {
@@ -8407,10 +8605,13 @@ RingMorph.prototype.fixBlockColor = function (nearest, isForced) {
 // RingMorph menu
 
 RingMorph.prototype.userMenu = function () {
-    var menu = new MenuMorph(this);
+    var menu,
+        slot = this.inputs()[0];
     if (this.parent instanceof MultiArgMorph &&
         this.parentThatIsA(ScriptsMorph)
     ) {
+        menu = new MenuMorph(this);
+
         if (!this.parent.maxInputs ||
             (this.parent.inputs().length < this.parent.maxInputs)
         ) {
@@ -8427,9 +8628,40 @@ RingMorph.prototype.userMenu = function () {
                 () => this.parent.deleteSlot(this)
             );
         }
-    return menu;
+        return menu;
     }
-    return RingMorph.uber.userMenu.call(this);
+
+    menu = RingMorph.uber.userMenu.call(this);
+    if (this.isTemplate) return menu;
+
+    menu.addLine();
+
+    if (slot instanceof RingReporterSlotMorph && // reporter slot
+        slot.nestedBlock() && // has a block inside it
+        slot.nestedBlock() instanceof ReporterBlockMorph // is a reporter block
+    ) {
+        // reporter - allow converting to a command (with a single report)
+
+        menu.addItem(
+            "as command...",
+            () => {
+                var block = slot.nestedBlock().fullCopy(),
+                    reportBlock = SpriteMorph.prototype.blockForSelector("doReport");
+
+                reportBlock.replaceInput(reportBlock.inputs()[0], block);
+                reportBlock.isDraggable = true;
+                this.parentThatIsA(ScriptsMorph).add(reportBlock);
+
+                reportBlock.ringify();
+                reportBlock.parentThatIsA(RingMorph).pickUp(this.world());
+            },
+            "duplicate a new command ring with a report\n" +
+            "containing this block"
+        );
+    }
+
+    menu.addLine();
+    return menu;
 };
 
 // RingMorph op-sequence analysis

@@ -4485,10 +4485,10 @@ Process.prototype.reportAudio = function (choice) {
 };
 
 // Process snap version
-Process.prototype.reportSnapVersion = function() {
+Process.prototype.reportJASMVersion = function() {
     // by the time this function is called, gui would have already
-    // set the SnapVersion, so just return it
-    return SnapVersion;
+    // set the JASMVersion, so just return it
+    return JASMVersion;
 }
 
 Process.prototype.untype = function (typedArray) {

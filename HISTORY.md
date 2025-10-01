@@ -1,4 +1,4 @@
-# Snap! (BYOB) History
+# JASM! (mod of Snap!) History
 
 ## in development:
 
@@ -7,6 +7,11 @@
 in web console, shouldn't break anything
 * added new "random boolean" block, along with a new "group" of blocks for randomness
 * blocks: changed isPredicate to a shape member, with 'predicate' for predicate
+* blocks: used the 'shape' member to add a "color" shape, a rectangle shape, similar
+  to the color slot
+* some general branding updates to JASM!, change version number to 11.1
+* blocks: some basic ring converting (only reporter to report command), not perfectly
+  ready yet
 
 ## 11.0.4:
 * **Notable Changes:**
