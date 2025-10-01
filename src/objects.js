@@ -1087,6 +1087,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportColor: {
             type: 'reporter',
             category: 'pen',
+            shape: 'color',
             spec: 'color %clr',
             code: 'colorFrom'
         },
@@ -1101,6 +1102,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             category: 'pen',
             spec: 'new color %hsbt',
+            shape: 'color',
             code: 'newColor'
         },
 
@@ -1672,11 +1674,11 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             defaults: [['volume']],
             code: 'audio'
         },
-        reportSnapVersion: {
+        reportJASMVersion: {
             type: 'reporter',
             category: 'sensing',
-            spec: 'snap version',
-            code: 'snapVersion'
+            spec: 'jasm! version',
+            code: 'jasmVersion'
         },
 
         // Operators
@@ -2555,6 +2557,7 @@ SpriteMorph.prototype.customBlockDefinitionFor = function (selector) {
     def.isGlobal = true;
     def.type = record.type;
     def.category = record.category;
+    def.shape = record.shape ? record.shape : 'reporter';
     return def;
 };
 
@@ -3625,6 +3628,9 @@ SpriteMorph.prototype.blockForSelector = function (selector, setDefaults) {
         block.color = this.blockColorFor(info.category);
         block.category = info.category;
         block.selector = migration ? migration.selector : selector;
+        if (block instanceof ReporterBlockMorph && info.type !== 'predicate') {
+            block.shape = info.shape ? info.shape : 'reporter';
+        }
         if (contains(['reifyReporter', 'reifyPredicate'], block.selector)) {
             block.isStatic = true;
         }
@@ -4010,7 +4016,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('reportGlobalFlag'));
         blocks.push(block('doSetGlobalFlag'));
         blocks.push('-');
-        blocks.push(block('reportSnapVersion'));
+        blocks.push(block('reportJASMVersion'));
 
         // for debugging: ///////////////
         if (devMode) {
@@ -11596,7 +11602,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('reportGlobalFlag'));
         blocks.push(block('doSetGlobalFlag'));
         blocks.push('-');
-        blocks.push(block('reportSnapVersion'));
+        blocks.push(block('reportJASMVersion'));
 
         // for debugging: ///////////////
         if (this.world().isDevMode) {
