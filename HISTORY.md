@@ -2,7 +2,7 @@
 
 ## in development:
 
-### 2025-09-30
+### 2025-09-30 and 2025-10-1
 * morphic: allow saving a morph as a variable in the global scope for easy debugging
 in web console, shouldn't break anything
 * added new "random boolean" block, along with a new "group" of blocks for randomness
