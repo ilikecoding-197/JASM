@@ -12,6 +12,8 @@ in web console, shouldn't break anything
 * some general branding updates to JASM!, change version number to 11.1
 * blocks: some basic ring converting (only reporter to report command), not perfectly
   ready yet
+* threads and objects: added new "JavaScript allowed?" block to detect when you can
+  use JS
 
 ## 11.0.4:
 * **Notable Changes:**
