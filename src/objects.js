@@ -1939,6 +1939,12 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             spec: 'JavaScript function ( %mult%s ) { %code }',
             code: 'js'
         },
+        reportJSAllowed: {
+            type: 'predicate',
+            category: 'operators',
+            spec: 'JavaScript allowed?',
+            code: 'jsAllowed'
+        },
         reportTypeOf: { // only in dev mode for debugging
             dev: true,
             type: 'reporter',
@@ -4076,6 +4082,7 @@ SpriteMorph.prototype.blockTemplates = function (
         if (Process.prototype.enableJS) {
             blocks.push('-');
             blocks.push(block('reportJSFunction'));
+            blocks.push(block('reportJSAllowed'));
             if (Process.prototype.enableCompiling) {
                 blocks.push(block('reportCompiled'));
             }
@@ -11663,6 +11670,7 @@ StageMorph.prototype.blockTemplates = function (
         if (Process.prototype.enableJS) { // (Process.prototype.enableJS) {
             blocks.push('-');
             blocks.push(block('reportJSFunction'));
+            blocks.push(block('reportJSAllowed'));
             if (Process.prototype.enableCompiling) {
                 blocks.push(block('reportCompiled'));
             }

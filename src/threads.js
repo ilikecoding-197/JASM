@@ -1470,6 +1470,10 @@ Process.prototype.reportJSFunction = function (parmNames, body) {
     );
 };
 
+Process.prototype.reportJSAllowed = function() {
+    return this.enableJS;
+}
+
 Process.prototype.doRun = function (context, args) {
     return this.evaluate(context, args, true);
 };
