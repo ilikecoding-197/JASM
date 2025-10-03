@@ -306,6 +306,12 @@
 * neural networks library: tweaked "partition" reporter to make sure each class in a data set is adequately represented in both partitions
 * German translation update for newly added "classifier" string
 
+### 2025-10-2
+* objects: added new "pen state" reporter and setter - to allow easy pen restoring
+  (just using list)
+* objects and threads: added new "list from ring" to report a new list of a certain
+  length using the current index as the ring input
+
 ### 2025-09-30 and 2025-10-1
 * morphic: allow saving a morph as a variable in the global scope for easy debugging
 in web console, shouldn't break anything
