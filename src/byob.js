@@ -1268,6 +1268,9 @@ CustomCommandBlockMorph.prototype.refresh = function (aDefinition, offset) {
         this.definition = null;
     }
 
+    if (def.comment)
+        this.hint = def.comment.text();
+
     this.setCategory(def.category);
     this.selector = def.primitive || 'evaluateCustomBlock';
     if (this.blockSpec !== newSpec) {
@@ -2481,23 +2484,6 @@ CustomReporterBlockMorph.prototype.fireSlotEditedEvent =
 CustomReporterBlockMorph.prototype.inputSlotNamed =
     CustomCommandBlockMorph.prototype.inputSlotNamed;
 
-// hover help - commented out for now
-/*
-CustomReporterBlockMorph.prototype.mouseEnter
-    = CustomCommandBlockMorph.prototype.mouseEnter;
-
-CustomReporterBlockMorph.prototype.mouseLeave
-    = CustomCommandBlockMorph.prototype.mouseLeave;
-*/
-
-// CustomReporterBlockMorph bubble help:
-
-CustomReporterBlockMorph.prototype.bubbleHelp
-    = CustomCommandBlockMorph.prototype.bubbleHelp;
-
-CustomReporterBlockMorph.prototype.popUpbubbleHelp
-    = CustomCommandBlockMorph.prototype.popUpbubbleHelp;
-
 // CustomReporterBlockMorph relabelling
 
 CustomReporterBlockMorph.prototype.relabel
@@ -2645,23 +2631,6 @@ CustomHatBlockMorph.prototype.fireSlotEditedEvent =
 
 CustomHatBlockMorph.prototype.inputSlotNamed =
     CustomCommandBlockMorph.prototype.inputSlotNamed;
-
-// hover help - commented out for now
-/*
-CustomHatBlockMorph.prototype.mouseEnter
-    = CustomCommandBlockMorph.prototype.mouseEnter;
-
-CustomHatBlockMorph.prototype.mouseLeave
-    = CustomCommandBlockMorph.prototype.mouseLeave;
-*/
-
-// CustomHatBlockMorph bubble help:
-
-CustomHatBlockMorph.prototype.bubbleHelp
-    = CustomCommandBlockMorph.prototype.bubbleHelp;
-
-CustomHatBlockMorph.prototype.popUpbubbleHelp
-    = CustomCommandBlockMorph.prototype.popUpbubbleHelp;
 
 // CustomHatBlockMorph relabelling
 
