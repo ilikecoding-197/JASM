@@ -3084,6 +3084,7 @@ BlockMorph.uber = SyntaxElementMorph.prototype;
 
 BlockMorph.prototype.isCachingInputs = true;
 BlockMorph.prototype.zebraContrast = 40; // alternating color brightness
+BlockMorph.prototype.disableBlockHints = false;
 
 // BlockMorph sound feedback:
 
@@ -3109,6 +3110,8 @@ BlockMorph.prototype.init = function () {
     this.selector = null; // name of method to be triggered
     this.blockSpec = ''; // formal description of label and arguments
     this.comment = null; // optional "sticky" comment morph
+    this.hint = null; // optional "hint", shown on hover
+    this.hintBubble = null; // copy of the SpeechBubbleMorph for hover help
 
     // not to be persisted:
     this.instantiationSpec = null; // spec to set upon fullCopy() of template
@@ -6362,6 +6365,32 @@ BlockMorph.prototype.editPrimitive = function () {
     editor.popUp();
     editor.changed();
 };
+
+// BlockMorph hint:
+
+BlockMorph.prototype.popUpbubbleHelp = function (contents) {
+    this.hintBubble = new SpeechBubbleMorph(
+        localize(contents),
+        null,
+        null,
+        1
+    );
+    
+    this.hintBubble.popUp(this.world(), this.rightCenter().add(new Point(-8, 0)));
+};
+
+BlockMorph.prototype.mouseEnter = function() {
+    if (this.hint && !BlockMorph.prototype.disableBlockHints) {
+        this.popUpbubbleHelp(this.hint);
+    }
+}
+
+BlockMorph.prototype.mouseLeave = function() {
+    if (this.hintBubble) {
+        this.hintBubble.destroy();
+        this.hintBubble = null;
+    }
+}
  
 // CommandBlockMorph ///////////////////////////////////////////////////
 

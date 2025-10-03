@@ -3644,6 +3644,9 @@ SpriteMorph.prototype.blockForSelector = function (selector, setDefaults) {
         if (contains(['reifyReporter', 'reifyPredicate'], block.selector)) {
             block.isStatic = true;
         }
+        if (info.hint) {
+            block.hint = info.hint;
+        }
         block.setSpec(block.localizeBlockSpec(info.spec));
     }
     if (migration && migration.expand) {

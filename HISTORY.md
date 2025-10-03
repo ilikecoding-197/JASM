@@ -2,11 +2,13 @@
 
 ## in development:
 
+### 2025-10-3
+* blocks, gui, blocks, and byob: block hint, using SpeechBubbleMorph. also supports
+  custom blocks, using the attached comment. can be disabled.
+
 ### 2025-10-2
 * objects: added new "pen state" reporter and setter - to allow easy pen restoring
   (just using list)
-* objects and threads: added new "list from ring" to report a new list of a certain
-  length using the current index as the ring input
 
 ### 2025-09-30 and 2025-10-1
 * morphic: allow saving a morph as a variable in the global scope for easy debugging

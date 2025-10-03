@@ -5002,6 +5002,15 @@ IDE_Morph.prototype.settingsMenu = function () {
         'disable dragging media\nand blocks out of\nwatchers and balloons',
         false
     );
+    addPreference(
+        'Disable block hints',
+        () => BlockMorph.prototype.disableBlockHints =
+            !BlockMorph.prototype.disableBlockHints,
+        BlockMorph.prototype.disableBlockHints,
+        'uncheck to have speech\nbubbles with help\nwhen hovering over\nblocks',
+        'check to not have speech\nbubbles with help\nwhen hovering over\nblocks',
+        false
+    );
     menu.popup(world, pos);
 };
 
