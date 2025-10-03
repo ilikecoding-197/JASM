@@ -982,6 +982,29 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             defaults: [['hue']],
             code: 'pen'
         },
+        getPenState: {
+            type: 'reporter',
+            category: 'pen',
+            spec: 'pen state',
+            code: 'penState',
+            src: `(
+                (prim t getPenState) 
+                (report 
+                    (list (pen [size]) (pen [color]) (down?))))`
+        },
+        setPenState: {
+            type: 'command',
+            category: 'pen',
+            spec: 'set pen to state to %l',
+            code: 'setPenState',
+            src: `(
+                (prim t setPenState state) 
+                (penSize= (item 1 (get state))) 
+                (setColor (item 2 (get state)))
+                (ifElse (item 3 (get state)) 
+                    (down) 
+                    (up)))`
+        },
         setBackgroundColor: {
             only: StageMorph,
             type: 'command',
@@ -3869,6 +3892,9 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('setPenColorDimension'));
         blocks.push(block('getPenAttribute'));
         blocks.push('-');
+        blocks.push(block('getPenState'));
+        blocks.push(block('setPenState'));
+        blocks.push('-');
         blocks.push(block('changeSize'));
         blocks.push(block('setSize'));
         blocks.push('-');
@@ -6425,6 +6451,9 @@ SpriteMorph.prototype.getPenAttribute = function (attrib) {
     if (name === 'color') {
         return this.color.copy();
     }
+    if (name === 'state') {
+        
+    }
     if (name === 'r-g-b-a') {
         return new List([
             this.color.r,
@@ -6435,6 +6464,36 @@ SpriteMorph.prototype.getPenAttribute = function (attrib) {
     }
     return this.getColorDimension(options.indexOf(name));
 };
+
+SpriteMorph.prototype.getPenState = function () {
+    return new List([
+        this.size || 0, // size
+        this.color.copy(), // color
+        this.getPenDown(), // pen down
+    ]);
+}
+
+SpriteMorph.prototype.setPenState = function (lst) {
+    if (
+        // list checking
+        !(lst instanceof List) || // must be a list
+        lst.length() != 3 || // must have three items
+
+        // item checking
+        typeof lst.at(1) !== 'number' || // first, size, must be a number
+        !(lst.at(2) instanceof Color) || // second, color, must be a Color
+        typeof lst.at(3) !== 'boolean'   // third, pen down, must be a boolean
+    ) {
+        throw new Error("not a vaild pen state");
+    }
+
+    this.setSize(lst.at(1)); // size
+    this.setColor(lst.at(2)); // color
+
+    // pen down
+    if (lst.at(3)) this.down();
+    else this.up();
+}
 
 // SpriteMorph layers
 
