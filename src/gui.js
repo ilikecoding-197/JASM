@@ -3435,21 +3435,24 @@ IDE_Morph.prototype.brightTheme = function () {
 
 IDE_Morph.prototype.selectDarkModeColor = function() {
     var colors = {
-        red: new Color(25, 0, 0),
-        green: new Color(0, 25, 0),
-        blue: new Color(0, 0, 25)
+        red: new Color(10, 0, 0),
+        green: new Color(0, 10, 0),
+        blue: new Color(0, 0, 10),
+        purple: new Color(10, 0, 10),
+        pink: new Color(10, 7, 8)
     },
         dlg = new DialogBoxMorph(this),
         frame = new FrameMorph(),
-        colorSteps = 4,
+        colorSteps = 6,
         padding = 10,
-        size = 50,
+        size = 35,
         btn,
         y = size + padding,
         x,
         clr,
         blackBtn,
-        myself = this;
+        myself = this,
+        world = this.world();
 
     dlg.labelString = 'Dark mode color';
     dlg.createLabel();
@@ -3458,22 +3461,20 @@ IDE_Morph.prototype.selectDarkModeColor = function() {
     frame.setHeight((size + padding) * (Object.keys(colors).length + 1) - padding);
     frame.setColor(CLEAR);
 
-    function addColorButton(color, pos) {
+    function addColorButton(color, hint, pos) {
         btn = new TriggerMorph(
             null,
             () => {
                 IDE_Morph.prototype.setDefaultTheme(color);
                 this.lastDarkModeColor = color;
                 myself.refreshIDE();
-
-                // open the dialog AGAIN, as refreshIDE.. removes the dialog
-                selectDarkModeColor();
             }
         );
 
         btn.setExtent(new Point(size, size));
         btn.setColor(color);
         btn.setPosition(pos);
+        btn.hint = hint;
         btn.highlightColor = btn.color.lighter(10);
         btn.pressColor = btn.color.lighter(20);
         frame.add(btn);
@@ -3481,14 +3482,14 @@ IDE_Morph.prototype.selectDarkModeColor = function() {
         return btn;
     }
 
-    blackBtn = addColorButton(new Color(10, 10, 10), new Point(0, 0));
+    blackBtn = addColorButton(new Color(10, 10, 10), 'default', new Point(0, 0));
     blackBtn.setWidth(frame.width());
 
     // add color buttons
     Object.entries(colors).forEach(([name, change]) => {
         clr = change;
         for (x = 0; x < frame.width(); x += size + padding) {
-            addColorButton(clr, new Point(x, y));
+            addColorButton(clr, name, new Point(x, y));
 
             clr = new Color(
                 clr.r + change.r,
@@ -3502,6 +3503,22 @@ IDE_Morph.prototype.selectDarkModeColor = function() {
     
     dlg.addBody(frame);
     dlg.addButton('ok', 'OK');
+
+    dlg.addButton(() => {
+        new DialogBoxMorph(
+            null,
+            (color) => {
+                IDE_Morph.prototype.setDefaultTheme(color);
+                this.lastDarkModeColor = color;
+                myself.refreshIDE();
+            }
+        ).promptRGB(
+            'Custom color',
+            new Color(10, 10, 10),
+            world
+        );
+    }, 'Custom...').hint = 'pick a custom color...';
+
     dlg.fixLayout();
     dlg.popUp(world);
 }
