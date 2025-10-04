@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2025-10-4
+* gui: snapMenu update for JASM
+
 ### 2025-10-3
 * blocks, gui, blocks, and byob: block hint, using SpeechBubbleMorph. also supports
   custom blocks, using the attached comment. can be disabled.

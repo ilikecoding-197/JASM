@@ -4232,23 +4232,11 @@ IDE_Morph.prototype.snapMenu = function () {
         world = this.world();
 
     menu = new MenuMorph(this);
-    menu.addItem('About...', 'aboutSnap');
-    menu.addLine();
-    menu.addItem(
-        'Reference manual',
-        () => {
-            var url = this.resourceURL('help', 'SnapManual.pdf');
-            window.open(url, 'SnapReferenceManual');
-        }
-    );
-    menu.addItem(
-        'Snap! website',
-        () => window.open('https://snap.berkeley.edu/', 'SnapWebsite')
-    );
+    menu.addItem('About JASM...', 'aboutSnap');
     menu.addItem(
         'Download source',
         () => window.open(
-                'https://github.com/jmoenig/Snap/releases/latest',
+                'https://github.com/ilikecoding-197/JASM',
                 'SnapSource'
             )
     );
