@@ -112,7 +112,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph, InputList, MultiArgMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2025-May-13';
+modules.byob = '2025-October-03';
 
 // Declarations
 

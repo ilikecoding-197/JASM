@@ -6,7 +6,7 @@
 * gui: snapMenu update for JASM
 
 ### 2025-10-3
-* blocks, gui, blocks, and byob: block hint, using SpeechBubbleMorph. also supports
+* blocks, gui, and byob: block hint, using SpeechBubbleMorph. also supports
   custom blocks, using the attached comment. can be disabled.
 * gui: allow changing dark mode color, try dark red it looks really good!
 

@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-August-29';
+modules.threads = '2025-October-1';
 
 var ThreadManager;
 var Process;
