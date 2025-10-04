@@ -135,13 +135,13 @@ IDE_Morph.prototype.setFlatDesign = function () {
     SyntaxElementMorph.prototype.contrast = 20;
 };
 
-IDE_Morph.prototype.setDefaultTheme = function () { // dark
+IDE_Morph.prototype.setDefaultTheme = function (color) { // dark
     IDE_Morph.prototype.isBright = false;
 
-    PushButtonMorph.prototype.outlineColor = new Color(30, 30, 30);
+    PushButtonMorph.prototype.outlineColor = color.lighter(10);
     PushButtonMorph.prototype.outlineGradient = false;
 
-    SpriteMorph.prototype.paletteColor = new Color(30, 30, 30);
+    SpriteMorph.prototype.paletteColor = color.lighter(10);
     SpriteMorph.prototype.paletteTextColor = new Color(230, 230, 230);
     StageMorph.prototype.paletteTextColor
         = SpriteMorph.prototype.paletteTextColor;
@@ -150,7 +150,7 @@ IDE_Morph.prototype.setDefaultTheme = function () { // dark
         = SpriteMorph.prototype.paletteColor.lighter(30);
 
     IDE_Morph.prototype.buttonContrast = 30;
-    IDE_Morph.prototype.backgroundColor = new Color(10, 10, 10);
+    IDE_Morph.prototype.backgroundColor = color;
     IDE_Morph.prototype.frameColor = SpriteMorph.prototype.paletteColor;
 
     IDE_Morph.prototype.groupColor
@@ -239,7 +239,7 @@ IDE_Morph.prototype.scriptsTexture = function () {
     return pic;
 };
 
-IDE_Morph.prototype.setDefaultTheme();
+IDE_Morph.prototype.setDefaultTheme(new Color(10, 10, 10));
 IDE_Morph.prototype.setDefaultDesign();
 
 // IDE_Morph instance creation:
@@ -376,6 +376,8 @@ IDE_Morph.prototype.init = function (config) {
     // under construction, commented out for now
     // SpriteMorph.prototype.customizeBlocks();
     // this.bootstrapCustomizedPrimitives();
+
+    this.lastDarkModeColor = new Color(10, 10, 10);
 };
 
 IDE_Morph.prototype.openIn = function (world) {
@@ -897,7 +899,7 @@ IDE_Morph.prototype.applyConfigurations = function () {
         if (cnf.theme === 'bright') {
             this.setBrightTheme();
         } else if (cnf.theme === 'dark') {
-            this.setDefaultTheme();
+            this.setDefaultTheme(new Color(10, 10, 10));
         }
     }
 
@@ -3393,7 +3395,7 @@ IDE_Morph.prototype.toggleRetina = function () {
 
 IDE_Morph.prototype.defaultLooks = function () {
     this.setDefaultDesign();
-    this.setDefaultTheme();
+    this.setDefaultTheme(this.lastDarkModeColor);
     this.refreshIDE();
     this.removeSetting('design');
     this.removeSetting('theme');
@@ -3420,7 +3422,7 @@ IDE_Morph.prototype.flatDesign = function () {
 };
 
 IDE_Morph.prototype.defaultTheme = function () {
-    this.setDefaultTheme();
+    this.setDefaultTheme(this.lastDarkModeColor);
     this.refreshIDE();
     this.removeSetting('theme');
 };
@@ -3430,6 +3432,79 @@ IDE_Morph.prototype.brightTheme = function () {
     this.refreshIDE();
     this.saveSetting('theme', 'bright');
 };
+
+IDE_Morph.prototype.selectDarkModeColor = function() {
+    var colors = {
+        red: new Color(25, 0, 0),
+        green: new Color(0, 25, 0),
+        blue: new Color(0, 0, 25)
+    },
+        dlg = new DialogBoxMorph(this),
+        frame = new FrameMorph(),
+        colorSteps = 4,
+        padding = 10,
+        size = 50,
+        btn,
+        y = size + padding,
+        x,
+        clr,
+        blackBtn,
+        myself = this;
+
+    dlg.labelString = 'Dark mode color';
+    dlg.createLabel();
+
+    frame.setWidth((size + padding) * colorSteps - padding);
+    frame.setHeight((size + padding) * (Object.keys(colors).length + 1) - padding);
+    frame.setColor(CLEAR);
+
+    function addColorButton(color, pos) {
+        btn = new TriggerMorph(
+            null,
+            () => {
+                IDE_Morph.prototype.setDefaultTheme(color);
+                this.lastDarkModeColor = color;
+                myself.refreshIDE();
+
+                // open the dialog AGAIN, as refreshIDE.. removes the dialog
+                selectDarkModeColor();
+            }
+        );
+
+        btn.setExtent(new Point(size, size));
+        btn.setColor(color);
+        btn.setPosition(pos);
+        btn.highlightColor = btn.color.lighter(10);
+        btn.pressColor = btn.color.lighter(20);
+        frame.add(btn);
+
+        return btn;
+    }
+
+    blackBtn = addColorButton(new Color(10, 10, 10), new Point(0, 0));
+    blackBtn.setWidth(frame.width());
+
+    // add color buttons
+    Object.entries(colors).forEach(([name, change]) => {
+        clr = change;
+        for (x = 0; x < frame.width(); x += size + padding) {
+            addColorButton(clr, new Point(x, y));
+
+            clr = new Color(
+                clr.r + change.r,
+                clr.g + change.g,
+                clr.b + change.b
+            );
+        }
+
+        y += size + padding;
+    });
+    
+    dlg.addBody(frame);
+    dlg.addButton('ok', 'OK');
+    dlg.fixLayout();
+    dlg.popUp(world);
+}
 
 IDE_Morph.prototype.refreshIDE = function () {
     var projectData;
@@ -3489,7 +3564,7 @@ IDE_Morph.prototype.applySavedSettings = function () {
     if (theme === 'bright') {
         this.setBrightTheme();
     } else {
-        this.setDefaultTheme();
+        this.setDefaultTheme(new Color(10, 10, 10));
     }
 
     // blocks zoom
@@ -7960,6 +8035,14 @@ IDE_Morph.prototype.looksMenuData = function () {
         'check for alternative\nGUI theme',
         false
     );
+    if (!IDE_Morph.prototype.isBright) {
+        menu.addLine();
+        menu.addItem(
+            'Dark mode color',
+            'selectDarkModeColor',
+            'select the color tint for dark mode'
+        )
+    }
     return menu;
 };
 

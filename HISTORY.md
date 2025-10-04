@@ -5,6 +5,7 @@
 ### 2025-10-3
 * blocks, gui, blocks, and byob: block hint, using SpeechBubbleMorph. also supports
   custom blocks, using the attached comment. can be disabled.
+* gui: allow changing dark mode color, try dark red it looks really good!
 
 ### 2025-10-2
 * objects: added new "pen state" reporter and setter - to allow easy pen restoring
