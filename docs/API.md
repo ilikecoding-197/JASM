@@ -173,7 +173,7 @@ The model case in mind is embedding Snap! in an iframe following a pattern such 
             title="Inline Frame Example"
             width="1024"
             height="720"
-            src="snap.html">
+            src="jasm.html">
         </iframe>
     </body>
 </html>
