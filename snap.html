@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Snap! Build Your Own Blocks</title>
+        <title>JASM! Build Your Own Blocks</title>
         <link rel="icon" href="src/favicon.ico" type="image/x-icon">
         <link rel="manifest" href="manifest.json">
         <link rel="apple-touch-icon" href="img/snap-icon-152.png">
@@ -60,7 +60,9 @@
                     navigator.serviceWorker.register('sw.js');
                 }
                 world = new WorldMorph(document.getElementById('world'));
-                new IDE_Morph().openIn(world);
+                new IDE_Morph({
+                    noCloud: true
+                }).openIn(world);
                 requestAnimationFrame(loop);
             };
         </script>

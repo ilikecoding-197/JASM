@@ -310,7 +310,7 @@
 * blocks and objects: new "object" shape
 * blocks: special case for reportJASMVersion - to put JASMVersion in the
   report block
-
+* gui, snap.html: branding fixes & no cloud
 ### 2025-10-4
 * gui: snapMenu update for JASM
 

@@ -1596,7 +1596,7 @@ IDE_Morph.prototype.createControlBar = function () {
                 ' (' + myself.scene.name + ')' : '';
         name = (myself.getProjectName() || localize('untitled'));
         if (!myself.config.preserveTitle) {
-            document.title = "Snap! " +
+            document.title = "JASM! " +
                 (myself.getProjectName() ? name : JASMVersion);
         }
         txt = new StringMorph(
@@ -9464,13 +9464,11 @@ IDE_Morph.prototype.warnAboutDev = function () {
     }
     this.inform(
         "CAUTION! Development Version",
-        'This version of Snap! is being developed.\n' +
+        'This version of JASM! is being developed.\n' +
             '*** It is NOT supported for end users. ***\n' +
             'Saving a project in THIS version is likely to\n' +
             'make it UNUSABLE or DEFECTIVE for current and\n' +
-            'even future official versions!\n\n' +
-            'visit https://snap.berkeley.edu/run\n' +
-            'for the official Snap! installation.'
+            'even future official versions!'
     ).nag = true;
 };
 
