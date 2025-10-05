@@ -28,7 +28,7 @@ If your preferred web browser does not support PWAs, e.g. if you're using Deskto
 
 1. Download the latest Snap! Release from
 [https://github.com/jmoenig/Snap/releases/latest](https://github.com/jmoenig/Snap/releases/latest "Snap! Source Code"), and unpack the contents of the archive to your local disk.
-2. Open the file `snap.html` in your browser.
+2. Open the file `jasm.html` in your browser.
 3. There is no step 3.
 
 Snap! is just a web page, you can open it locally in your browser, no need to install anything
@@ -43,7 +43,7 @@ Windows users, this is for you.
 
 Once you've downloaded the source code, please remember to actually unpack the archive
 to your computer. If you downloaded the zip file please actually unzip it, before you open
-`snap.html`. If you use a Mac simple double-clicking the zip file unpacks it. But if you're
+`jasm.html`. If you use a Mac simple double-clicking the zip file unpacks it. But if you're
 on Windows double clicking the zip fie will *not* unzip it but instead show you the contents of
 the archive.
 
@@ -67,7 +67,7 @@ you'd like to see, e.g. blocks or sprites.
 
 You can't access the cloud, duh. Everything else just works.
 
-Aside from accessing the cloud using Snap! offline in the browser by opening the `snap.html`
+Aside from accessing the cloud using Snap! offline in the browser by opening the `jasm.html`
 file locally there aren't any restrictions. You can use all the blocks, import pictures, sounds,
 libraries, take snapshots with the webcom, record sounds with the microphone, draw your
 own costumes etc.

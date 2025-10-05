@@ -3,7 +3,7 @@
 var snapVersion = '11.1-dev',
     cacheName = `snap-pwa-${snapVersion}`,
     filesToCache = [
-        'snap.html',
+        'jasm.html',
 
         // program
         'src/morphic.js',

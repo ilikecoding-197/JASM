@@ -5341,7 +5341,7 @@ IDE_Morph.prototype.projectMenu = function () {
 IDE_Morph.prototype.resourceURL = function () {
     // Take in variadic inputs that represent an a nested folder structure.
     // Method can be easily overridden if running in a custom location.
-    // Default Snap! simply returns a path (relative to snap.html)
+    // Default Snap! simply returns a path (relative to jasm.html)
     // Note: You can specify a base path to the root directory in the
     // configuration object's "path" property that's passed when creating
     // an IDE instance, e.g. either a relative one: {path: '../' }
