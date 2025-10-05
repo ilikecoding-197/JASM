@@ -824,6 +824,8 @@ IDE_Morph.prototype.openIn = function (world) {
 
     if (location.protocol === 'file:') {
         Process.prototype.enableJS = true;
+        SpriteMorph.prototype.showingExtensions = true;
+        SpriteMorph.prototype.showingDocs = true;
     } else {
         if (!sessionStorage.username) {
             // check whether login should persist across browser sessions
@@ -4620,6 +4622,19 @@ IDE_Morph.prototype.settingsMenu = function () {
         SpriteMorph.prototype.showingExtensions,
         'uncheck to hide extension\nprimitives in the palette',
         'check to show extension\nprimitives in the palette'
+    );
+    addPreference(
+        'Document blocks',
+        () => {
+            SpriteMorph.prototype.showingDocs =
+                !SpriteMorph.prototype.showingDocs;
+            this.flushBlocksCache('variables');
+            this.refreshPalette();
+            this.categories.refreshEmpty();
+        },
+        SpriteMorph.prototype.showingDocs,
+        'uncheck to hide documenation\nblocks in the palette',
+        'check to show documenation\nblocks in the palette',
     );
     /*
     addPreference(

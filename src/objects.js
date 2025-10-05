@@ -197,6 +197,7 @@ SpriteMorph.prototype.isCachingPrimitives = true;
 SpriteMorph.prototype.enableNesting = true;
 SpriteMorph.prototype.enableFirstClass = true;
 SpriteMorph.prototype.showingExtensions = false;
+SpriteMorph.prototype.showingDocs = false;
 SpriteMorph.prototype.useFlatLineEnds = false;
 SpriteMorph.prototype.penColorModel = 'hsv'; // or 'hsl'
 SpriteMorph.prototype.disableDraggingData = false;
@@ -2380,6 +2381,21 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             spec: 'extension %ext %mult%s',
             code: 'ext'
         },
+        
+        // Documentation blocks - prefixed with 'nop', tells Process to do
+        // nothing on them
+        nopDoc: {
+            type: 'command',
+            category: 'other',
+            spec: '$file doc %c',
+            code: 'doc'
+        },
+        nopDocDesc: {
+            type: 'command',
+            category: 'other',
+            spec: '$file description %s',
+            code: 'desc'
+        },
 
         // Video motion
         doSetVideoTransparency: {
@@ -4176,6 +4192,12 @@ SpriteMorph.prototype.blockTemplates = function (
             blocks.push(block('doPrimitive'));
             blocks.push(block('doApplyExtension'));
             blocks.push(block('reportApplyExtension'));
+        }
+
+        if (SpriteMorph.prototype.showingDocs) {
+            blocks.push('=');
+            blocks.push(block('nopDoc'));
+            blocks.push(block('nopDocDesc'));
         }
 
         if (StageMorph.prototype.enableCodeMapping) {
@@ -11500,6 +11522,12 @@ StageMorph.prototype.blockTemplates = function (
             blocks.push(block('doPrimitive'));
             blocks.push(block('doApplyExtension'));
             blocks.push(block('reportApplyExtension'));
+        }
+
+        if (SpriteMorph.prototype.showingDocs) {
+            blocks.push('=');
+            blocks.push(block('nopDoc'));
+            blocks.push(block('nopDocDesc'));
         }
 
         if (StageMorph.prototype.enableCodeMapping) {

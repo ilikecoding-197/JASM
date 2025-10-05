@@ -874,17 +874,29 @@ Process.prototype.evaluateBlock = function (block, argCount) {
         }
         if (this.isCatchingErrors) {
             try {
-                this.returnValueToParentContext(
-                    rcvr[selector].apply(rcvr, inputs)
-                );
+                if (selector.startsWith('nop')) {
+                    this.returnValueToParentContext(
+                        ''
+                    );
+                } else {
+                    this.returnValueToParentContext(
+                        rcvr[selector].apply(rcvr, inputs)
+                    );
+                }
                 this.popContext();
             } catch (error) {
                 this.handleError(error, block);
             }
         } else {
-            this.returnValueToParentContext(
-                rcvr[selector].apply(rcvr, inputs)
-            );
+            if (selector.startsWith('nop')) {
+                this.returnValueToParentContext(
+                    ''
+                );
+            } else {
+                this.returnValueToParentContext(
+                    rcvr[selector].apply(rcvr, inputs)
+                );
+            }
             this.popContext();
         }
     }

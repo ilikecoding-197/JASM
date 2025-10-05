@@ -1796,6 +1796,22 @@ SnapExtensions.primitives.set(
     }
 );
 
+// documenation block parsing:
+
+SnapExtensions.primitives.set(
+    'doc_parse(block)',
+    function (block, proc) {
+        try {
+            var expr = block.expression;
+
+            return new Documentation(expr.definition).toSnapList();
+
+        } catch (e) {
+            return '';
+        }
+    }
+);
+
 // Menus
 
 SnapExtensions.menus.set(

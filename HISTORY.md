@@ -7,6 +7,9 @@
 * blocks: special case for reportJASMVersion - to put JASMVersion in the
   report block
 * gui, snap.html: branding fixes & no cloud
+* blocks, threads, gui, objects, extenstions, doc: added basic documentation
+  support, with extension, doc blocks, and new 'doc' module
+* gui: enabled extension and doc blocks by default on file: protocols
 ### 2025-10-4
 * gui: snapMenu update for JASM
 
