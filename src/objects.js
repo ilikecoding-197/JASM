@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-October-02';
+modules.objects = '2025-October-05';
 
 var SpriteMorph;
 var StageMorph;
@@ -1394,6 +1394,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         newClone: {
             type: 'reporter',
             category: 'control',
+            shape: 'object',
             spec: 'a new clone of %clntrtl',
             defaults: [['myself']],
             animation: true
@@ -1639,6 +1640,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             spec: 'object %self',
             defaults: [['myself']],
             code: 'object',
+            shape: 'object',
             src: `(
                 (prim t reportObject name)
                 (report (zip
