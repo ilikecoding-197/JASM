@@ -6402,7 +6402,15 @@ BlockMorph.prototype.editPrimitive = function () {
         def = SpriteMorph.prototype.customBlockDefinitionFor(this.selector),
         editor;
     proc.pushContext();
-    if (info.src) {
+    if (this.selector == 'reportJASMVersion') {
+        console.log("jasm");
+        
+        def.setBlockDefinition(proc.assemble(proc.parseCode(
+            `(
+(prim t reportJASMVersion) 
+(report ` + window.JASMVersion + `))`
+        )));
+    } else if (info.src) {
         def.setBlockDefinition(proc.assemble(proc.parseCode(info.src)));
     }
     editor = new BlockEditorMorph(def, rcvr);
