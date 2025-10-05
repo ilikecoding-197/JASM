@@ -2289,7 +2289,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
         x = this.left() + ico + this.edge + this.labelPadding;
         if (this instanceof RingMorph) {
             x = this.left() + space; //this.labelPadding;
-        } else if (this.shape == "predicate") {
+        } else if (this.shape == "predicate" || this.shape == "object") {
             x = this.left() + ico + this.rounding;
         } else if (this instanceof MultiArgMorph ||
             this instanceof ArgLabelMorph
@@ -2304,7 +2304,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
             }
             if (part instanceof CSlotMorph) {
                 x -= this.labelPadding;
-                if (this.shape == "predicate") {
+                if (this.shape == "predicate" || this.shape == "object") {
                     x = this.left() + ico + this.rounding;
                 }
                 part.setColor(this.color);
@@ -2313,7 +2313,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
             } else if (part instanceof MultiArgMorph &&
                     (part.slotSpec.includes('%cs'))
             ) {
-                if (this.shape == "predicate") {
+                if (this.shape == "predicate" || this.shape == "object") {
                     x += this.corner;
                 }
                 part.setPosition(new Point(x, y));
@@ -2392,7 +2392,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
     }
 
     // determine my width:
-    if (this.shape == "predicate") {
+    if (this.shape == "predicate" || this.shape == "object") {
         blockWidth = Math.max(
             blockWidth,
             maxX - this.left() + this.rounding
@@ -2435,7 +2435,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
         if (part instanceof CSlotMorph ||
             (part.slotSpec && part.slotSpec.includes('%cs'))
         ) {
-            if (this.shape == "predicate") {
+            if (this.shape == "predicate" || this.shape == "object") {
                 part.bounds.setWidth(
                     blockWidth -
                         ico -
@@ -7842,6 +7842,9 @@ ReporterBlockMorph.prototype.outlinePath = function (ctx, inset) {
     case "color":
         this.outlinePathRectangle(ctx, inset);
         break;
+    case "object":
+        this.outlinePathObject(ctx, inset);
+        break;
     default:
         this.outlinePathOval(ctx, inset);
         break;
@@ -7948,6 +7951,32 @@ ReporterBlockMorph.prototype.outlinePathDiamond = function (ctx, inset) {
     ctx.lineTo(r, h - inset);
 };
 
+ReporterBlockMorph.prototype.outlinePathObject = function (ctx, inset) {
+    // draw the 'flat' shape:
+    var w = this.width(),
+        h = this.height(),
+        h2 = Math.floor(h / 2),
+        r = this.rounding,
+        right = w - r,
+        pos = this.position(),
+        cslots = this.cSlots();
+
+    ctx.moveTo(inset+r, h2);
+    ctx.lineTo(inset, inset);
+    ctx.lineTo(right - inset, inset);
+
+    if (cslots.length) {
+        this.cSlots().forEach(slot => {
+            slot.outlinePath(ctx, inset, slot.position().subtract(pos));
+        });
+    } else {
+        ctx.lineTo(w - inset, h2);
+    }
+
+    ctx.lineTo(right - inset, h - inset);
+    ctx.lineTo(inset, h - inset);
+};
+
 ReporterBlockMorph.prototype.drawEdges = function (ctx) {
     switch (this.shape) {
     case "predicate":
@@ -7955,6 +7984,9 @@ ReporterBlockMorph.prototype.drawEdges = function (ctx) {
         break;
     case "color":
         this.drawEdgesRectangle(ctx);
+        break;
+    case "object":
+        this.drawEdgesObject(ctx);
         break;
     default:
         this.drawEdgesOval(ctx);
@@ -8447,6 +8479,153 @@ ReporterBlockMorph.prototype.drawEdgesDiamond = function (ctx) {
     ctx.strokeStyle = gradient;
     ctx.beginPath();
     ctx.moveTo(r + shift, h - shift);
+    ctx.lineTo(w - r - shift, h - shift);
+    ctx.closePath();
+    ctx.stroke();
+};
+
+ReporterBlockMorph.prototype.drawEdgesObject = function (ctx) {
+    // add 3D-Effec
+    var w = this.width(),
+        h = this.height(),
+        h2 = Math.floor(h / 2),
+        r = this.rounding,
+        shift = this.edge / 2,
+        cslots = this.cSlots(),
+        top = this.top(),
+        y,
+        gradient;
+
+    ctx.lineWidth = this.edge;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+
+    // half-tone edges
+    // bottom left corner
+    gradient = ctx.createLinearGradient(
+        -r,
+        0,
+        r,
+        0
+    );
+    gradient.addColorStop(1, this.cachedClr);
+    gradient.addColorStop(0, this.cachedClrBright);
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(shift+r, h2);
+    ctx.lineTo(shift, h - shift);
+    ctx.closePath();
+    ctx.stroke();
+
+    // normal gradient edges
+    // top edge: left corner
+    gradient = ctx.createLinearGradient(
+        0,
+        0,
+        r,
+        0
+    );
+    gradient.addColorStop(0, this.cachedClrBright);
+    gradient.addColorStop(1, this.cachedClr);
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(shift+r, h2);
+    ctx.lineTo(shift, shift);
+    ctx.closePath();
+    ctx.stroke();
+
+    // top edge: straight line
+    gradient = ctx.createLinearGradient(
+        0,
+        0,
+        0,
+        this.edge
+    );
+    gradient.addColorStop(0, this.cachedClrBright);
+    gradient.addColorStop(1, this.cachedClr);
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(shift, shift);
+
+    // right edge
+    if (cslots.length) {
+        // end of top edge
+        ctx.lineTo(w - r - shift, shift);
+        ctx.closePath();
+        ctx.stroke();
+
+        // right vertical edge
+        gradient = ctx.createLinearGradient(w - r - this.edge, 0, w - r, 0);
+        gradient.addColorStop(0, this.cachedClr);
+        gradient.addColorStop(1, this.cachedClrDark);
+
+        ctx.lineWidth = this.edge;
+        ctx.lineJoin = 'round';
+        ctx.lineCap = 'round';
+        ctx.strokeStyle = gradient;
+
+        ctx.beginPath();
+        ctx.moveTo(w - r - shift, this.edge + shift);
+        cslots.forEach(slot => {
+            y = slot.top() - top;
+            ctx.lineTo(w - r - shift, y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(w - r - shift, y + slot.height());
+        });
+        ctx.lineTo(w - r - shift, h - shift);
+        ctx.stroke();
+    } else {
+        // end of top edge
+        ctx.lineTo(w - r, shift);
+        ctx.closePath();
+        ctx.stroke();
+
+        // top diagonal slope right
+        gradient = ctx.createLinearGradient(
+            w - r,
+            0,
+            w + r,
+            0
+        );
+        gradient.addColorStop(0, this.cachedClr);
+        gradient.addColorStop(1, this.cachedClrDark);
+        ctx.strokeStyle = gradient;
+        ctx.beginPath();
+        ctx.moveTo(w - shift, h2);
+        ctx.lineTo(w - r, shift);
+        ctx.closePath();
+        ctx.stroke();
+
+        // bottom diagonal slope right
+        gradient = ctx.createLinearGradient(
+            w - r,
+            0,
+            w,
+            0
+        );
+        gradient.addColorStop(0, this.cachedClr);
+        gradient.addColorStop(1, this.cachedClrDark);
+        ctx.strokeStyle = gradient;
+        ctx.beginPath();
+        ctx.moveTo(w - r, h - shift);
+        ctx.lineTo(w - shift, h2);
+        ctx.closePath();
+        ctx.stroke();
+    }
+
+    // bottom edge: straight line
+    gradient = ctx.createLinearGradient(
+        0,
+        h - this.edge,
+        0,
+        h
+    );
+    gradient.addColorStop(0, this.cachedClr);
+    gradient.addColorStop(1, this.cachedClrDark);
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(shift, h - shift);
     ctx.lineTo(w - r - shift, h - shift);
     ctx.closePath();
     ctx.stroke();

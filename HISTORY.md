@@ -306,6 +306,9 @@
 * neural networks library: tweaked "partition" reporter to make sure each class in a data set is adequately represented in both partitions
 * German translation update for newly added "classifier" string
 
+### 2025-10-5
+* blocks and objects: new "object" shape
+
 ### 2025-10-4
 * gui: snapMenu update for JASM
 
