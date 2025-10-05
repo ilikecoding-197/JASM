@@ -4,6 +4,8 @@
 
 ### 2025-10-5
 * blocks and objects: new "object" shape
+* blocks: special case for reportJASMVersion - to put JASMVersion in the
+  report block
 
 ### 2025-10-4
 * gui: snapMenu update for JASM
