@@ -1800,7 +1800,7 @@ SnapExtensions.primitives.set(
 
 SnapExtensions.primitives.set(
     'doc_parse(block)',
-    function (block, proc) {
+    function (block) {
         try {
             var expr = block.expression;
 
@@ -1810,6 +1810,15 @@ SnapExtensions.primitives.set(
             console.error("Error while parsing block for documentation: ", e);
             return '';
         }
+    }
+);
+
+SnapExtensions.primitives.set(
+    'doc_html(doc)',
+    function (doc, proc) {
+        if (!(doc instanceof List)) return '';
+
+        return Documentation.fromList(doc).toHTML(proc);
     }
 );
 

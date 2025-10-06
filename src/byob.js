@@ -2350,7 +2350,8 @@ CustomCommandBlockMorph.prototype.inputSlotNamed = function (name) {
 
 // CustomCommandBlockMorph HTML documenation
 CustomCommandBlockMorph.prototype.downloadDocHTML = function () {
-    var def = this.isGlobal ? this.definition : rcvr.getMethod(this.blockSpec),
+    var rcvr = this.scriptTarget(),
+        def = this.isGlobal ? this.definition : rcvr.getMethod(this.blockSpec),
         doc,
         ide = ide = this.world().children[0],
         blob,
@@ -2368,7 +2369,11 @@ CustomCommandBlockMorph.prototype.downloadDocHTML = function () {
             return;
         }
 
-        var blob = new Blob([doc.toHTML()], {type: "text/html;charset=utf-8"});
+        // generate a process to use for lisp conversion
+        var proc = new Process();
+        proc.pushContext();
+
+        var blob = new Blob([doc.toHTML(proc)], {type: "text/html;charset=utf-8"});
         saveAs(blob, "doc.html");
     } catch (e) {
         console.error(e);

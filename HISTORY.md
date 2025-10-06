@@ -2,6 +2,9 @@
 
 ## in development:
 
+## 2025-10-6
+* byob, doc, extensions: more HTML generation support
+
 ### 2025-10-5
 * blocks and objects: new "object" shape
 * blocks: special case for reportJASMVersion - to put JASMVersion in the
