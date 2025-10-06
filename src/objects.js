@@ -2394,7 +2394,25 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'command',
             category: 'other',
             spec: '$file description %s',
-            code: 'desc'
+            code: 'docDesc'
+        },
+        nopDocParam: {
+            type: 'command',
+            category: 'other',
+            spec: '$file param %s : %s',
+            code: 'docParam'
+        },
+        nopDocReturn: {
+            type: 'command',
+            category: 'other',
+            spec: '$file return %s',
+            code: 'docReturn'
+        },
+        nopDocExample: {
+            type: 'command',
+            category: 'other',
+            spec: '$file example %mlt %cmdRing',
+            code: 'docExample'
         },
 
         // Video motion
@@ -4198,6 +4216,9 @@ SpriteMorph.prototype.blockTemplates = function (
             blocks.push('=');
             blocks.push(block('nopDoc'));
             blocks.push(block('nopDocDesc'));
+            blocks.push(block('nopDocParam'));
+            blocks.push(block('nopDocReturn'));
+            blocks.push(block('nopDocExample'));
         }
 
         if (StageMorph.prototype.enableCodeMapping) {
@@ -11528,6 +11549,9 @@ StageMorph.prototype.blockTemplates = function (
             blocks.push('=');
             blocks.push(block('nopDoc'));
             blocks.push(block('nopDocDesc'));
+            blocks.push(block('nopDocParam'));
+            blocks.push(block('nopDocReturn'));
+            blocks.push(block('nopDocExample'));
         }
 
         if (StageMorph.prototype.enableCodeMapping) {

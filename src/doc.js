@@ -63,6 +63,16 @@ function Documentation(def) {
 
 Documentation.prototype.init = function(def) {
     this.description = "No description avaiable.";
+    this.params = new Map();
+    this.examples = new Map();
+
+    console.log(def);
+
+    if (def.type == 'reporter' || def.type == 'predicate') {
+        this.return = "No return info avaiable.";
+    } else {
+        this.return = null;
+    }
 
     this.parse(def);
 }
@@ -70,7 +80,8 @@ Documentation.prototype.init = function(def) {
 // Documentation parsing:
 Documentation.prototype.parse = function(def) {
     var expr,
-        children;
+        children,
+        inps;
 
     // vaildity
     if (
@@ -96,9 +107,26 @@ Documentation.prototype.parse = function(def) {
     children = expr.inputs()[0].evaluate().blockSequence();
 
     children.forEach(block => {
+    console.log(block);
         switch (block.selector) {
             case 'nopDocDesc': // description
                 this.description = block.inputs()[0].evaluate();
+                break;
+            case 'nopDocParam': // param
+                inputs = block.inputs();
+                this.params.set(inputs[0].evaluate(), inputs[1].evaluate());
+
+                break;
+            case 'nopDocReturn': // return
+                if (def.type == 'reporter' || def.type == 'predicate') {
+                    this.return = block.inputs()[0].evaluate();
+                }
+
+                break;
+            case 'nopDocExample': // example
+                inputs = block.inputs();
+                this.examples.set(inputs[0].evaluate(), inputs[1].children[0].children[0].toLisp());
+
                 break;
         }
     });
@@ -106,7 +134,15 @@ Documentation.prototype.parse = function(def) {
 
 // Documentation conversion to a Snap! List (for doc_parse extension block):
 Documentation.prototype.toSnapList = function () {
+    function snapTableFromMap(map) {
+        return new List(
+            Array.from(map.entries()).map((item) => new List(item))
+        )
+    }
     return new List([
-        this.description
+        this.description,
+        snapTableFromMap(this.params),
+        snapTableFromMap(this.examples),
+        this.return || ''
     ]);
 }

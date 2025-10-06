@@ -1807,6 +1807,7 @@ SnapExtensions.primitives.set(
             return new Documentation(expr.definition).toSnapList();
 
         } catch (e) {
+            console.error("Error while parsing block for documentation: ", e);
             return '';
         }
     }
