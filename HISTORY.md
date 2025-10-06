@@ -10,7 +10,7 @@
 * blocks, threads, gui, objects, extenstions, doc: added basic documentation
   support, with extension, doc blocks, and new 'doc' module
 * gui: enabled extension and doc blocks by default on file: protocols
-
+* doc and byob: HTML generation support - still have to fill out the code
 ### 2025-10-4
 * gui: snapMenu update for JASM
 

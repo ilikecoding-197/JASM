@@ -146,3 +146,11 @@ Documentation.prototype.toSnapList = function () {
         this.return || ''
     ]);
 }
+
+// Documentation conversion to HTML code:
+Documentation.prototype.toHTML = function() {
+    var doc = document.implementation.createHTMLDocument("Block Documenation")
+
+
+    return doc.documentElement.outerHTML;
+}

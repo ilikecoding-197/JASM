@@ -2056,6 +2056,8 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
         );
     }
     menu.addItem("edit...", 'edit'); // works also for prototypes
+    menu.addLine();
+    menu.addItem("download documentaton HTML...", "downloadDocHTML");
     return menu;
 };
 
@@ -2346,6 +2348,36 @@ CustomCommandBlockMorph.prototype.inputSlotNamed = function (name) {
         each.toLowerCase()).indexOf(name.toLowerCase())];
 };
 
+// CustomCommandBlockMorph HTML documenation
+CustomCommandBlockMorph.prototype.downloadDocHTML = function () {
+    var def = this.isGlobal ? this.definition : rcvr.getMethod(this.blockSpec),
+        doc,
+        ide = ide = this.world().children[0],
+        blob,
+        blobIsSupported = false;
+
+    try {
+        doc = new Documentation(def);
+
+        try {
+            blobIsSupported = !!new Blob();
+        } catch (e) {}
+        
+        if (!blobIsSupported) {
+            ide.showMessage("can't export, blob not supported");
+            return;
+        }
+
+        var blob = new Blob([doc.toHTML()], {type: "text/html;charset=utf-8"});
+        saveAs(blob, "doc.html");
+    } catch (e) {
+        console.error(e);
+
+        ide.showMessage("couldn't generate: " + e.message + 
+            "\ncheck console for more info");
+    }
+}
+
 // CustomReporterBlockMorph ////////////////////////////////////////////
 
 // CustomReporterBlockMorph inherits from ReporterBlockMorph:
@@ -2491,6 +2523,10 @@ CustomReporterBlockMorph.prototype.relabel
 
 CustomReporterBlockMorph.prototype.alternatives
     = CustomCommandBlockMorph.prototype.alternatives;
+
+
+CustomReporterBlockMorph.prototype.downloadDocHTML
+    = CustomCommandBlockMorph.prototype.downloadDocHTML;
 
 // CustomHatBlockMorph ////////////////////////////////////////////
 
@@ -2643,6 +2679,10 @@ CustomHatBlockMorph.prototype.alternatives
 // CustomHatBlockMorph syntax analysis
 
 CustomHatBlockMorph.prototype.reify = BlockMorph.prototype.reify;
+
+
+CustomReporterBlockMorph.prototype.downloadDocHTML
+    = CustomCommandBlockMorph.prototype.downloadDocHTML;
 
 // JaggedBlockMorph ////////////////////////////////////////////////////
 
