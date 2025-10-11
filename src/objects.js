@@ -10988,8 +10988,6 @@ StageMorph.prototype.fireUserEditEvent = function (
 };
 
 StageMorph.prototype.fireGreenFlagEvent = function () {
-    alert("Green flag!");
-
     var procs = [],
         ide = this.parentThatIsA(IDE_Morph);
 
