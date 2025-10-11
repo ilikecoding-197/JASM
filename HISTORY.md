@@ -2,6 +2,10 @@
 
 ## in development:
 
+### 2025-10-11
+* objects, threads: new block to prompt for JavaScript, so users,
+  if they choose to allow it, dont have to go into the editor.
+
 ### 2025-10-5
 * blocks and objects: new "object" shape
 * blocks: special case for reportJASMVersion - to put JASMVersion in the

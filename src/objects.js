@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-October-05';
+modules.objects = '2025-October-11';
 
 var SpriteMorph;
 var StageMorph;
@@ -1961,6 +1961,12 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             category: 'operators',
             spec: 'JavaScript allowed?',
             code: 'jsAllowed'
+        },
+        doPromptForJS: {
+            type: 'command',
+            category: 'operators',
+            spec: 'prompt for JavaScript with reason %s',
+            code: 'jsPrompt'
         },
         reportTypeOf: { // only in dev mode for debugging
             dev: true,
@@ -4090,6 +4096,7 @@ SpriteMorph.prototype.blockTemplates = function (
             blocks.push('-');
             blocks.push(block('reportJSFunction'));
             blocks.push(block('reportJSAllowed'));
+            blocks.push(block('doPromptForJS'));
             if (Process.prototype.enableCompiling) {
                 blocks.push(block('reportCompiled'));
             }
@@ -11420,6 +11427,7 @@ StageMorph.prototype.blockTemplates = function (
             blocks.push('-');
             blocks.push(block('reportJSFunction'));
             blocks.push(block('reportJSAllowed'));
+            blocks.push(block('doPromptForJS'));
             if (Process.prototype.enableCompiling) {
                 blocks.push(block('reportCompiled'));
             }

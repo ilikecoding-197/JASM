@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-October-1';
+modules.threads = '2025-October-11';
 
 var ThreadManager;
 var Process;
@@ -649,6 +649,7 @@ function Process(topBlock, receiver, onComplete, yieldFirst) {
     this.isFirstStep = true;
     this.isAtomic = false;
     this.prompter = null;
+    this.JSPrompter = null;
     this.httpRequest = null;
     this.isPaused = false;
     this.pauseOffset = null;
@@ -1472,6 +1473,73 @@ Process.prototype.reportJSFunction = function (parmNames, body) {
 
 Process.prototype.reportJSAllowed = function() {
     return this.enableJS;
+}
+
+Process.prototype.doPromptForJS = function(message) {
+    var txt,
+        reasonStr = '';
+
+    if (this.enableJS) {
+        throw new Error("JS is already enabled, wrap this\nin a IF block with a JS ALLOWED\nblock in it!");
+    }
+
+    if (this.JSPrompter) {
+        if (this.JSPrompter.done) {
+            this.JSPrompter.destroy();
+
+            Process.prototype.enableJS = this.JSPrompter.saidYes;
+            this.enableJS = Process.prototype.enableJS;
+        } else {
+            this.pushContext('doYield');
+            this.pushContext();
+        }
+    } else {
+        this.JSPrompter = new DialogBoxMorph();
+        this.JSPrompter.done = false;
+        this.JSPrompter.saidYes = false;
+
+        if (message.length > 0) {
+            reasonStr = "Reason: " + message + "\n";
+        }
+
+        txt = new TextMorph(
+            'A script in the project you are\n' +
+            'running is asking to use JS.\n' +
+            reasonStr +
+            'Enable it?\n\n' +
+            'NOTE: Only enable JS from projects\n' +
+            'you trust, as using it CAN and WILL\n' +
+            'get you hacked somehow.',
+            this.JSPrompter.fontSize,
+            this.JSPrompter.fontStyle,
+            true,
+            false,
+            'center',
+            null,
+            null,
+            MorphicPreferences.isFlat ? null : new Point(1, 1),
+            WHITE
+        );
+        this.JSPrompter.addBody(txt);
+
+        this.JSPrompter.addButton(() => {
+            console.log(this);
+            this.JSPrompter.done = true;
+            this.JSPrompter.saidYes = true;
+        }, "Yes (DANGEROUS!)");
+        this.JSPrompter.addButton(() => {
+            this.JSPrompter.done = true;
+        }, "No");
+
+        this.JSPrompter.labelString = "Use JS?";
+        this.JSPrompter.createLabel();
+
+        this.JSPrompter.fixLayout();
+        this.JSPrompter.popUp(this.homeContext.receiver.world());
+
+        this.pushContext('doYield');
+        this.pushContext();
+    }
 }
 
 Process.prototype.doRun = function (context, args) {
