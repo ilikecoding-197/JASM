@@ -309,6 +309,8 @@
 ### 2025-10-11
 * objects, threads: new block to prompt for JavaScript, so users,
   if they choose to allow it, dont have to go into the editor.
+* objects: removed "Green flag!' alert on green flag, might have been
+  from me debugging
 
 ### 2025-10-5
 * blocks and objects: new "object" shape
