@@ -162,7 +162,7 @@ CustomHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2025-October-05';
+modules.blocks = '2025-November-07';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8850,8 +8850,6 @@ RingMorph.prototype.userMenu = function () {
     menu = RingMorph.uber.userMenu.call(this);
     if (this.isTemplate) return menu;
 
-    menu.addLine();
-
     if (slot instanceof RingReporterSlotMorph && // reporter slot
         slot.nestedBlock() && // has a block inside it
         slot.nestedBlock() instanceof ReporterBlockMorph // is a reporter block
@@ -8876,7 +8874,6 @@ RingMorph.prototype.userMenu = function () {
         );
     }
 
-    menu.addLine();
     return menu;
 };
 
