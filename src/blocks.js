@@ -16662,6 +16662,7 @@ CommentMorph.prototype.fullCopy = function () {
     if (this.selectionID) { // for copy on write
         cpy.selectionID = true;
     }
+    cpy.setCommentColor(this.commentColor);
     return cpy;
 };
 
