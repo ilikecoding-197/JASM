@@ -306,6 +306,9 @@
 * neural networks library: tweaked "partition" reporter to make sure each class in a data set is adequately represented in both partitions
 * German translation update for newly added "classifier" string
 
+### 2025-11-7
+* blocks: remove seperators for as command... menu item
+
 ### 2025-10-11
 * objects, threads: new block to prompt for JavaScript, so users,
   if they choose to allow it, dont have to go into the editor.

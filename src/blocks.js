@@ -8895,8 +8895,6 @@ RingMorph.prototype.userMenu = function () {
     menu = RingMorph.uber.userMenu.call(this);
     if (this.isTemplate) return menu;
 
-    menu.addLine();
-
     if (slot instanceof RingReporterSlotMorph && // reporter slot
         slot.nestedBlock() && // has a block inside it
         slot.nestedBlock() instanceof ReporterBlockMorph // is a reporter block
@@ -8921,7 +8919,6 @@ RingMorph.prototype.userMenu = function () {
         );
     }
 
-    menu.addLine();
     return menu;
 };
 
