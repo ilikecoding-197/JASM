@@ -4,6 +4,7 @@
 
 ### 2025-11-7
 * blocks: remove seperators for as command... menu item
+* blocks, store: added colors for comments and saving/loading for it
 
 ### 2025-10-11
 * objects, threads: new block to prompt for JavaScript, so users,

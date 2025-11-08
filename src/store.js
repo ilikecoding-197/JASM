@@ -63,7 +63,7 @@ Project, CustomHatBlockMorph, JASMVersion*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2025-April-01';
+modules.store = '2025-November-07';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -1470,6 +1470,7 @@ SnapSerializer.prototype.loadComment = function (model) {
         scale = SyntaxElementMorph.prototype.scale;
     comment.isCollapsed = (model.attributes.collapsed === 'true');
     comment.setTextWidth(+model.attributes.w * scale);
+    comment.setCommentColor(model.attributes.color);
     return comment;
 };
 
@@ -2842,9 +2843,10 @@ CommentMorph.prototype.toXML = function (serializer) {
 
     if (this.block) { // attached to a block
         return serializer.format(
-            '<comment w="@" collapsed="@">%</comment>',
+            '<comment w="@" collapsed="@" color="%">%</comment>',
             this.textWidth() / scale,
             this.isCollapsed,
+            this.commentColor,
             serializer.escape(this.text())
         );
     }
@@ -2856,11 +2858,12 @@ CommentMorph.prototype.toXML = function (serializer) {
         position = this.topLeft();
     }
     return serializer.format(
-        '<comment x="@" y="@" w="@" collapsed="@">%</comment>',
+        '<comment x="@" y="@" w="@" collapsed="@" color="%">%</comment>',
         position.x / scale,
         position.y / scale,
         this.textWidth() / scale,
         this.isCollapsed,
+        this.commentColor,
         serializer.escape(this.text())
     );
 };

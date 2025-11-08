@@ -16518,6 +16518,22 @@ CommentMorph.prototype.refreshScale = function () {
 
 CommentMorph.prototype.refreshScale();
 
+// CommentMorph colors:
+CommentMorph.prototype.COLORS = {
+    "yellow": [new Color(255, 250, 200), new Color(255, 255, 235), BLACK],
+    "red":    [new Color(230, 120, 120), new Color(250, 180, 180), BLACK],
+    "green":  [new Color(180, 230, 180), new Color(210, 250, 210), BLACK],
+    "blue":   [new Color(170, 200, 240), new Color(200, 225, 255), BLACK],
+    "orange": [new Color(245, 190, 120), new Color(255, 220, 170), BLACK],
+    "purple": [new Color(210, 180, 230), new Color(235, 210, 255), BLACK],
+    "cyan":   [new Color(180, 230, 230), new Color(210, 250, 250), BLACK],
+    "gray":   [new Color(200, 200, 200), new Color(235, 235, 235), BLACK],
+    "white":  [new Color(255, 255, 255), new Color(240, 240, 240), BLACK],
+    "black":  [new Color(40, 40, 40),    new Color(70, 70, 70),    WHITE]
+};
+
+
+
 // CommentMorph instance creation:
 
 function CommentMorph(contents) {
@@ -16569,6 +16585,7 @@ CommentMorph.prototype.init = function (contents) {
     );
     this.color = new Color(255, 255, 220);
     this.isDraggable = true;
+    this.commentColor = "yellow";
     this.add(this.titleBar);
     this.add(this.arrow);
     this.add(this.contents);
@@ -16626,6 +16643,28 @@ CommentMorph.prototype.comeToFront = function () {
         this.changed();
     }
 };
+
+CommentMorph.prototype.setCommentColor = function (name) {
+    var colors;
+
+    if (this.COLORS.hasOwnProperty(name)) colors = this.COLORS[name]
+    else colors = this.COLORS.yellow;
+
+    this.commentColor = this.COLORS.hasOwnProperty(name) ? name : "yellow";
+
+    this.titleBar.color = colors[0];
+    this.titleBar.borderColor = colors[0];
+    this.color = colors[1];
+    this.borderColor = colors[0];
+    this.contents.color = colors[2];
+    this.arrow.color = colors[2];
+    if (this.anchor) {
+        this.anchor.color = colors[0];
+        this.anchor.rerender();
+    }
+
+    this.rerender();
+}
 
 // CommentMorph events:
 
@@ -16710,7 +16749,25 @@ CommentMorph.prototype.fixLayout = function () {
 // CommentMorph menu:
 
 CommentMorph.prototype.userMenu = function () {
-    var menu = new MenuMorph(this);
+    var menu = new MenuMorph(this),
+        myself = this;
+
+    menu.addMenu("colors", (function(){
+        var colorsMenu = new MenuMorph(this);
+
+        Object.entries(myself.COLORS).forEach(element => {
+            var icon = new BoxMorph(6, 0);
+            icon.setWidth(12); icon.setHeight(12);
+            icon.setColor(element[1][1]);
+
+            colorsMenu.addItem([SpriteMorph.prototype.colorSwatch(element[1][1], 12), element[0]], () => {
+                myself.setCommentColor(element[0]);
+            });
+        });
+
+        return colorsMenu;
+    })());
+    menu.addLine();
 
     menu.addItem(
         "duplicate",
