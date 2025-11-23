@@ -306,6 +306,9 @@
 * neural networks library: tweaked "partition" reporter to make sure each class in a data set is adequately represented in both partitions
 * German translation update for newly added "classifier" string
 
+### 2025-11-23
+* gui: add saving for dark mode color
+
 ### 2025-11-7
 * blocks: remove seperators for as command... menu item
 * blocks, store: added colors for comments and saving/loading for it,

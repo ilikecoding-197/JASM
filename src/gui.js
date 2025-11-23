@@ -3506,10 +3506,11 @@ IDE_Morph.prototype.toggleRetina = function () {
 
 IDE_Morph.prototype.defaultLooks = function () {
     this.setDefaultDesign();
-    this.setDefaultTheme(this.lastDarkModeColor);
+    this.setDefaultTheme(new Color(10, 10, 10));
     this.refreshIDE();
     this.removeSetting('design');
     this.removeSetting('theme');
+    this.removeSetting('dark-mode-color');
 };
 
 IDE_Morph.prototype.flatBrightLooks = function () {
@@ -3518,6 +3519,7 @@ IDE_Morph.prototype.flatBrightLooks = function () {
     this.refreshIDE();
     this.saveSetting('design', 'flat');
     this.saveSetting('theme', 'bright');
+    this.removeSetting('dark-mode-color');
 };
 
 IDE_Morph.prototype.defaultDesign = function () {
@@ -3536,12 +3538,14 @@ IDE_Morph.prototype.defaultTheme = function () {
     this.setDefaultTheme(this.lastDarkModeColor);
     this.refreshIDE();
     this.removeSetting('theme');
+    this.removeSetting('dark-mode-color');
 };
 
 IDE_Morph.prototype.brightTheme = function () {
     this.setBrightTheme();
     this.refreshIDE();
     this.saveSetting('theme', 'bright');
+    this.removeSetting('dark-mode-color');
 };
 
 IDE_Morph.prototype.selectDarkModeColor = function() {
@@ -3577,8 +3581,10 @@ IDE_Morph.prototype.selectDarkModeColor = function() {
             null,
             () => {
                 IDE_Morph.prototype.setDefaultTheme(color);
-                this.lastDarkModeColor = color;
+                myself.lastDarkModeColor = color;
                 myself.refreshIDE();
+
+                myself.saveSetting('dark-mode-color', color.toString());
             }
         );
 
@@ -3620,8 +3626,10 @@ IDE_Morph.prototype.selectDarkModeColor = function() {
             null,
             (color) => {
                 IDE_Morph.prototype.setDefaultTheme(color);
-                this.lastDarkModeColor = color;
+                myself.lastDarkModeColor = color;
                 myself.refreshIDE();
+
+                myself.saveSetting('dark-mode-color', color.toString());
             }
         ).promptRGB(
             'Custom color',
@@ -3687,6 +3695,7 @@ IDE_Morph.prototype.applySavedSettings = function () {
 
     var design = this.getSetting('design'),
         theme = this.getSetting('theme'),
+        darkModeColor = this.getSetting('dark-mode-color'),
         zoom = this.getSetting('zoom'),
         fade = this.getSetting('fade'),
         glow = this.getSetting('glow'),
@@ -3711,7 +3720,12 @@ IDE_Morph.prototype.applySavedSettings = function () {
     if (theme === 'bright') {
         this.setBrightTheme();
     } else {
-        this.setDefaultTheme(new Color(10, 10, 10));
+        // dark mode color
+        if (darkModeColor) {
+            this.setDefaultTheme(Color.fromString(darkModeColor));
+        } else {
+            this.setDefaultTheme(new Color(10, 10, 10));
+        }
     }
 
     // blocks zoom
