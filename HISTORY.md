@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2025-11-23
+* gui: add saving for dark mode color
+
 ### 2025-11-7
 * blocks: remove seperators for as command... menu item
 * blocks, store: added colors for comments and saving/loading for it,
