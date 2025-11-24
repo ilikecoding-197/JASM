@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-October-11';
+modules.objects = '2025-November-24';
 
 var SpriteMorph;
 var StageMorph;

@@ -35,7 +35,7 @@ BigUint64Array, DeviceOrientationEvent, console*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2025-September-15';
+modules.extensions = '2025-November-24';
 
 // Global stuff
 

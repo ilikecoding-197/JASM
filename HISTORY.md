@@ -15,6 +15,8 @@
 * blocks: element stringify for speech bubbles
 * gui: change div to iframe so we can limit JS (we can modify using
     contentDocument)
+* update module versions - i probably wont do this that often
+
 ### 2025-11-23
 * gui: add saving for dark mode color
 
