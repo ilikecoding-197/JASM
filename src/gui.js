@@ -277,6 +277,7 @@ function IDE_Morph(config = {}) {
         noDevWarning:   bool, ignore development version incompatibility warning
         noExitWarning:  bool, do not show a browser warning when closing the IDE
                                 with unsaved changes
+        noHTML:         bool, disable/enable HTML extensions
         preserveTitle:  bool, do not set the tab title dynamically to reflect
                                 the current Snap! version
         blocksZoom:     num, zoom factor for blocks, e.g. 1.5
@@ -378,6 +379,8 @@ IDE_Morph.prototype.init = function (config) {
     // this.bootstrapCustomizedPrimitives();
 
     this.lastDarkModeColor = new Color(10, 10, 10);
+    this.htmlFrame = null;
+    this.htmlFrameShadow = null;
 };
 
 IDE_Morph.prototype.openIn = function (world) {
@@ -841,6 +844,9 @@ IDE_Morph.prototype.openIn = function (world) {
     this.applyConfigurations();
 
     this.warnAboutDev();
+
+    // for testing!
+    this.initializeHTML();
     return this;
 };
 
@@ -971,6 +977,11 @@ IDE_Morph.prototype.applyConfigurations = function () {
     // disable onbeforeunload close warning
     if (cnf.noExitWarning) {
         window.noExitWarning = true;
+    }
+
+    // HTML
+    if (!cnf.noHTML) {
+        initializeHTMLExtensions();
     }
 };
 
@@ -4614,6 +4625,7 @@ IDE_Morph.prototype.settingsMenu = function () {
             this.flushBlocksCache('operators');
             this.refreshPalette();
             this.categories.refreshEmpty();
+            this.secureHTML();
         },
         Process.prototype.enableJS,
         'uncheck to disable support for\nnative JavaScript functions',
@@ -9129,6 +9141,59 @@ IDE_Morph.prototype.warnAboutDev = function () {
             'even future official versions!'
     ).nag = true;
 };
+
+// IDE_Morph HTML support
+IDE_Morph.prototype.initializeHTML = function () {
+    if (this.htmlFrame) {
+        // if its already initialized, we just want to 
+        // reset it so disable it and continue
+        this.disableHTML();
+    }
+
+    this.htmlFrame = document.createElement('div');
+    this.htmlFrame.style.position = 'absolute';
+    this.htmlFrame.style.border = 'none';
+    this.htmlFrame.style.width = this.stage.dimensions.x + 'px';
+    this.htmlFrame.style.height = this.stage.dimensions.y + 'px';
+    this.htmlFrame.style.pointerEvents = 'none'; // make clicks fall through to stage
+    this.htmlFrame.style.overflow = 'hidden'; // hide scrollbars!!
+
+    // use a shadow DOM to isolate HTML content from rest of page (e.g. CSS)
+    this.htmlFrameShadow = this.htmlFrame.attachShadow({ mode: 'open' });
+
+    this.repositionHTML();
+    this.secureHTML();
+
+    document.body.appendChild(this.htmlFrame);
+};
+
+IDE_Morph.prototype.repositionHTML = function () {
+    var stagePos = this.stage.position();
+
+    if (this.htmlFrame) {
+        this.htmlFrame.style.left = stagePos.x + 'px';
+        this.htmlFrame.style.top = stagePos.y + 'px';
+        this.htmlFrame.style.transformOrigin = '0 0'; // top left
+        this.htmlFrame.style.transform = 'scale(' + this.stage.scale + ')';
+    }
+}
+
+IDE_Morph.prototype.disableHTML = function () {
+    if (this.htmlFrame) {
+        this.htmlFrame.remove();
+        this.htmlFrame = null;
+    }
+}
+
+IDE_Morph.prototype.secureHTML = function () {
+    if (!this.htmlFrame) return;
+
+    if (Process.prototype.enableJS) {
+        this.htmlFrame.sandbox = 'allow-same-origin allow-forms allow-scripts';
+    } else {
+        this.htmlFrame.sandbox = 'allow-same-origin allow-forms';
+    }
+}
 
 // ProjectDialogMorph ////////////////////////////////////////////////////
 

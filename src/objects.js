@@ -10171,7 +10171,8 @@ StageMorph.prototype.setScale = function (number) {
     var delta = number / this.scale,
         pos = this.position(),
         relativePos,
-        bubble;
+        bubble,
+        ide = this.parentThatIsA(IDE_Morph);
 
     if (delta === 1) {return; }
     this.cachedPenTrailsMorph = null;
@@ -10213,6 +10214,9 @@ StageMorph.prototype.setScale = function (number) {
             morph.popup(this, morph.position());
         }
     });
+
+    // update html
+    ide.repositionHTML();
 };
 
 StageMorph.prototype.moveBy = function (delta) {

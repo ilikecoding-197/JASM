@@ -1796,6 +1796,23 @@ SnapExtensions.primitives.set(
     }
 );
 
+// HTML extensions (htm_):
+
+// Use a function to set the extensions SO in IDE_Morph
+// we can skip it on noHTML set to true
+
+function initializeHTMLExtensions() {
+    SnapExtensions.primitives.set("htm_init", function () {
+        var ide = this.parentThatIsA(IDE_Morph);
+        ide.initializeHTML();
+    });
+
+    SnapExtensions.primitives.set("htm_uninit", function () {
+        var ide = this.parentThatIsA(IDE_Morph);
+        ide.disableHTML();
+    });
+}
+
 // Menus
 
 SnapExtensions.menus.set(

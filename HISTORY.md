@@ -3,6 +3,16 @@
 ## in development:
 
 ### 2025-11-23
+* basic HTML support!
+* gui: added noHTML option for disabling HTML, and created functions
+       for handling HTML
+* extensions: added two extensions - "htm_init" and "html_unint"
+              to initalize and deinitalize HTML
+* objects: added HTML repositioning on stage resizing
+* jasm.html: added overflow: hidden for HTML frame (sometimes it goes
+    off the page, probably inaccurate scale values - temporary fix)
+    
+### 2025-11-23
 * gui: add saving for dark mode color
 
 ### 2025-11-7
