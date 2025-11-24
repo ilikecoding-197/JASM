@@ -380,7 +380,6 @@ IDE_Morph.prototype.init = function (config) {
 
     this.lastDarkModeColor = new Color(10, 10, 10);
     this.htmlFrame = null;
-    this.htmlFrameShadow = null;
 };
 
 IDE_Morph.prototype.openIn = function (world) {
@@ -9150,16 +9149,13 @@ IDE_Morph.prototype.initializeHTML = function () {
         this.disableHTML();
     }
 
-    this.htmlFrame = document.createElement('div');
+    this.htmlFrame = document.createElement('iframe');
     this.htmlFrame.style.position = 'absolute';
     this.htmlFrame.style.border = 'none';
     this.htmlFrame.style.width = this.stage.dimensions.x + 'px';
     this.htmlFrame.style.height = this.stage.dimensions.y + 'px';
     this.htmlFrame.style.pointerEvents = 'none'; // make clicks fall through to stage
     this.htmlFrame.style.overflow = 'hidden'; // hide scrollbars!!
-
-    // use a shadow DOM to isolate HTML content from rest of page (e.g. CSS)
-    this.htmlFrameShadow = this.htmlFrame.attachShadow({ mode: 'open' });
 
     this.repositionHTML();
     this.secureHTML();

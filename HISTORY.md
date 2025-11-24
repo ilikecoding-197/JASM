@@ -13,7 +13,8 @@
     off the page, probably inaccurate scale values - temporary fix)
 * extensions: "htm_element" extension to create a HTML element
 * blocks: element stringify for speech bubbles
-
+* gui: change div to iframe so we can limit JS (we can modify using
+    contentDocument)
 ### 2025-11-23
 * gui: add saving for dark mode color
 
