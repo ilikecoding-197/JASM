@@ -1811,6 +1811,10 @@ function initializeHTMLExtensions() {
         var ide = this.parentThatIsA(IDE_Morph);
         ide.disableHTML();
     });
+
+    SnapExtensions.primitives.set("htm_element(name)", function (name) {
+        return document.createElement(name);
+    });
 }
 
 // Menus

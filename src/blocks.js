@@ -2740,6 +2740,11 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
             );
             return menu;
         };
+    } else if (value instanceof HTMLElement) {
+        morphToShow = new TextMorph(
+            value.tagName + " HTMLElement",
+            this.fontSize
+        );
     } else {
         return this.showBubble(
             display(value),

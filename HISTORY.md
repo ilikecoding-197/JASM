@@ -11,7 +11,9 @@
 * objects: added HTML repositioning on stage resizing
 * jasm.html: added overflow: hidden for HTML frame (sometimes it goes
     off the page, probably inaccurate scale values - temporary fix)
-    
+* extensions: "htm_element" extension to create a HTML element
+* blocks: element stringify for speech bubbles
+
 ### 2025-11-23
 * gui: add saving for dark mode color
 
