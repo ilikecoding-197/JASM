@@ -1815,6 +1815,22 @@ function initializeHTMLExtensions() {
     SnapExtensions.primitives.set("htm_element(name)", function (name) {
         return document.createElement(name);
     });
+
+    SnapExtensions.primitives.set("htm_append(parent, element)", function (parent, element) {
+        parent.appendChild(element);
+    });
+
+    SnapExtensions.primitives.set("htm_body", function() {
+        var ide = this.parentThatIsA(IDE_Morph);
+
+        return ide.htmlFrame.contentDocument.body;
+    });
+
+    SnapExtensions.primitives.set("htm_head", function() {
+        var ide = this.parentThatIsA(IDE_Morph);
+
+        return ide.htmlFrame.contentDocument.head;
+    });
 }
 
 // Menus

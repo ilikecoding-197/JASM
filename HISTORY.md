@@ -7,6 +7,8 @@
     setPosition
 * jasm.html: removed overflow attr for body, not needed
     anymore because of better override
+* extensions: added html extensions to add elements to another and
+    get the body or head element of the HTML frame
 
 ### 2025-11-23
 * basic HTML support!
