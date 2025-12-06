@@ -1831,6 +1831,14 @@ function initializeHTMLExtensions() {
 
         return ide.htmlFrame.contentDocument.head;
     });
+
+    SnapExtensions.primitives.set("htm_text(element, text)", function (element, text) {
+        element.innerText = text;
+    });
+
+    SnapExtensions.primitives.set("htm_text(element)", function (element) {
+        return element.innerText;
+    });
 }
 
 // Menus
