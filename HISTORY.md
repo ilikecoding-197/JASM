@@ -2,6 +2,12 @@
 
 ## in development:
 
+### 2025-12-6
+* objects: move repositionHTML call for StageMorph into 
+    setPosition
+* jasm.html: removed overflow attr for body, not needed
+    anymore because of better override
+
 ### 2025-11-23
 * basic HTML support!
 * gui: added noHTML option for disabling HTML, and created functions

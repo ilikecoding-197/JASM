@@ -10214,9 +10214,6 @@ StageMorph.prototype.setScale = function (number) {
             morph.popup(this, morph.position());
         }
     });
-
-    // update html
-    ide.repositionHTML();
 };
 
 StageMorph.prototype.moveBy = function (delta) {
@@ -12730,6 +12727,16 @@ StageMorph.prototype.toXMLString = function () {
     this.toXML = conversion;
     return xml;
 };
+
+// HTML repositioning override
+// Only need to override setPosition, I dont exactly know why,
+// but it works so just let it be and move on
+StageMorph.prototype.setPosition = function(...args) {
+    StageMorph.uber.setPosition.call(this, ...args);
+
+    var ide = this.parentThatIsA(IDE_Morph);
+    ide.repositionHTML();
+}
 
 // SpriteBubbleMorph ////////////////////////////////////////////////////////
 
